@@ -1,0 +1,19 @@
+flowchart TD
+    A[Клик по объявлению] --> B["/go"]
+    B --> C["Разбор UTM, click_id, yclid"]
+    C --> D["Оценка User-Agent, IP, частоты, referrer"]
+    D --> E{"Решение входного фильтра"}
+    E -->|good| F[Редирект на лендинг]
+    E -->|watch| G[Редирект на лендинг с пометкой наблюдения]
+    E -->|suspicious| H["Редирект на /safe"]
+    E -->|blocked| H
+    F --> I[Просмотры, прокрутка, CTA]
+    G --> I
+    I --> J["POST /api/event"]
+    I --> K["POST /api/lead"]
+    K --> L[Telegram-уведомление]
+    K --> M[(Leads)]
+    J --> N[(Events)]
+    B --> O[(Clicks)]
+    M --> P[Статусы менеджера]
+    P --> Q["qualified_lead / bad_lead / sale"]

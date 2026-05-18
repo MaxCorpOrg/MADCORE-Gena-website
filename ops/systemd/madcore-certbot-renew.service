@@ -1,0 +1,9 @@
+[Unit]
+Description=Renew MADCORE Let's Encrypt certificates via Docker webroot
+Wants=network-online.target docker.service
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/madcore-gena
+ExecStart=/opt/madcore-gena/scripts/server-certbot-renew.sh

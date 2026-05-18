@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LeadStatus {
+  NEW         @map("new")
+  IN_PROGRESS @map("in_progress")
+  QUALIFIED   @map("qualified")
+  BAD         @map("bad")
+  DUPLICATE   @map("duplicate")
+  SALE        @map("sale")
+}
+
+enum TrafficDecision {
+  GOOD       @map("good")
+  WATCH      @map("watch")
+  SUSPICIOUS @map("suspicious")
+  BLOCKED    @map("blocked")
+}
+
+model Lead {
+  id              BigInt     @id @default(autoincrement())
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+  name            String
+  phone           String
+  city            String
+  contactMethod   String     @map("contact_method")
+  comment         String?
+  productInterest String?    @map("product_interest")
+  clientId        String?    @map("client_id")
+  yclid           String?
+  leadStatus      LeadStatus @default(NEW) @map("lead_status")
+  managerComment  String?    @map("manager_comment")
+  scoreOut        Int        @default(0) @map("score_out")
+  saleAmount      Int?       @map("sale_amount")
+  utmSource       String?    @map("utm_source")
+  utmMedium       String?    @map("utm_medium")
+  utmCampaign     String?    @map("utm_campaign")
+  utmContent      String?    @map("utm_content")
+  utmTerm         String?    @map("utm_term")
+  src             String?
+  cmp             String?
+  cr              String?
+  clickId         String?    @map("click_id")
+  ip              String?
+  userAgent       String?    @map("user_agent")
+
+  @@index([createdAt], map: "idx_leads_created_at")
+  @@index([updatedAt], map: "idx_leads_updated_at")
+  @@index([ip], map: "idx_leads_ip")
+  @@index([clickId], map: "idx_leads_click_id")
+  @@index([clientId], map: "idx_leads_client_id")
+  @@index([leadStatus], map: "idx_leads_status")
+  @@index([yclid], map: "idx_leads_yclid")
+  @@map("leads")
+}
+
+model Click {
+  id               BigInt           @id @default(autoincrement())
+  createdAt        DateTime         @default(now()) @map("created_at")
+  ip               String?
+  userAgent        String?          @map("user_agent")
+  referrer         String?          @map("referer")
+  yclid            String?
+  src              String?
+  cmp              String?
+  cr               String?
+  clickId          String?          @map("click_id")
+  utmSource        String?          @map("utm_source")
+  utmMedium        String?          @map("utm_medium")
+  utmCampaign      String?          @map("utm_campaign")
+  utmContent       String?          @map("utm_content")
+  utmTerm          String?          @map("utm_term")
+  deviceType       String?          @map("device_type")
+  region           String?
+  city             String?
+  scoreIn          Int              @default(0) @map("score_in")
+  decisionIn       TrafficDecision? @map("decision_in")
+  targetUrl        String?          @map("target_url")
+  isSuspicious     Boolean          @default(false) @map("is_suspicious")
+  suspiciousReason String?          @map("suspicious_reason")
+
+  @@index([createdAt], map: "idx_clicks_created_at")
+  @@index([ip], map: "idx_clicks_ip")
+  @@index([clickId], map: "idx_clicks_click_id")
+  @@index([isSuspicious], map: "idx_clicks_suspicious")
+  @@index([decisionIn], map: "idx_clicks_decision_in")
+  @@index([yclid], map: "idx_clicks_yclid")
+  @@map("clicks")
+}
+
+model Event {
+  id          BigInt   @id @default(autoincrement())
+  createdAt   DateTime @default(now()) @map("created_at")
+  sessionId   String?  @map("session_id")
+  leadId      BigInt?  @map("lead_id")
+  eventName   String   @map("event_name")
+  eventValue  String?  @map("event_value")
+  pageUrl     String?  @map("page")
+  payload     Json?
+  src         String?
+  cmp         String?
+  cr          String?
+  clickId     String?  @map("click_id")
+  utmSource   String?  @map("utm_source")
+  utmMedium   String?  @map("utm_medium")
+  utmCampaign String?  @map("utm_campaign")
+  utmContent  String?  @map("utm_content")
+  utmTerm     String?  @map("utm_term")
+  clientId    String?  @map("client_id")
+  yclid       String?
+  ip          String?
+  userAgent   String?  @map("user_agent")
+
+  @@index([createdAt], map: "idx_events_created_at")
+  @@index([eventName], map: "idx_events_event_name")
+  @@index([sessionId], map: "idx_events_session_id")
+  @@index([clickId], map: "idx_events_click_id")
+  @@index([clientId], map: "idx_events_client_id")
+  @@index([leadId], map: "idx_events_lead_id")
+  @@map("events")
+}
+
+model TrafficSourceQuality {
+  id             BigInt   @id @default(autoincrement())
+  utmCampaign    String?  @map("utm_campaign")
+  utmContent     String?  @map("utm_content")
+  utmTerm        String?  @map("utm_term")
+  clicks         Int      @default(0)
+  leads          Int      @default(0)
+  qualifiedLeads Int      @default(0) @map("qualified_leads")
+  sales          Int      @default(0)
+  avgScoreIn     Float    @default(0) @map("avg_score_in")
+  avgScoreOut    Float    @default(0) @map("avg_score_out")
+  recommendation String?
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([utmCampaign], map: "idx_traffic_quality_campaign")
+  @@index([utmContent], map: "idx_traffic_quality_content")
+  @@index([utmTerm], map: "idx_traffic_quality_term")
+  @@map("traffic_sources_quality")
+}

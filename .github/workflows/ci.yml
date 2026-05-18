@@ -1,0 +1,47 @@
+name: Проверка проекта
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-and-lint:
+    name: Линтер и сборка
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить код
+        uses: actions/checkout@v4
+
+      - name: Настроить Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Сгенерировать Prisma Client
+        run: npx prisma generate
+
+      - name: Проверить код линтером
+        run: npm run lint
+
+      - name: Собрать production-версию
+        run: npm run build
+
+  secret-scan:
+    name: Проверка утечек секретов
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить историю репозитория
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Запустить gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

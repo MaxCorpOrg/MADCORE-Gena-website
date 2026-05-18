@@ -1,0 +1,88 @@
+name: Выкладка на production
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: madcore-gena-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Сборка и выкладка
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить код
+        uses: actions/checkout@v4
+
+      - name: Настроить Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Сгенерировать Prisma Client
+        run: npx prisma generate
+
+      - name: Проверить код линтером
+        run: npm run lint
+
+      - name: Собрать production-версию
+        run: npm run build
+
+      - name: Подготовить SSH-ключ
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Добавить сервер в known_hosts
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${SSH_PORT:-22}" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Отправить снимок проекта на сервер
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          rsync -az --delete \
+            --exclude ".env" \
+            --exclude ".env.local" \
+            --exclude ".env.production" \
+            --exclude ".data/" \
+            --exclude ".tmp/" \
+            --exclude ".next/" \
+            --exclude ".next-dev/" \
+            --exclude "node_modules/" \
+            --exclude "certbot/" \
+            --exclude "backups/" \
+            -e "ssh -p ${SSH_PORT:-22}" \
+            ./ "${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}/"
+
+      - name: Применить миграции и перезапустить сервисы
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          PRODUCTION_BASE_URL: ${{ secrets.PRODUCTION_BASE_URL }}
+        run: |
+          ssh -p "${SSH_PORT:-22}" "${SSH_USER}@${SSH_HOST}" <<EOF
+          set -euo pipefail
+          cd "${DEPLOY_PATH}"
+          ./scripts/server-db-backup.sh
+          docker compose up -d --build postgres app nginx
+          docker compose exec -T app npx prisma migrate deploy
+          ./scripts/production-smoke.sh "${PRODUCTION_BASE_URL}"
+          EOF

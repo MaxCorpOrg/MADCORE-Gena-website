@@ -1,0 +1,36 @@
+<svg width="1940" height="375" viewBox="0 0 1940 375" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="silverStroke" x1="142" y1="54" x2="1600" y2="322" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="0.22" stop-color="#D7E1ED"/>
+      <stop offset="0.52" stop-color="#94A4BA"/>
+      <stop offset="0.82" stop-color="#E7EEF6"/>
+      <stop offset="1" stop-color="#A7B5C7"/>
+    </linearGradient>
+    <linearGradient id="silverFill" x1="188" y1="78" x2="1520" y2="296" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FAFDFF"/>
+      <stop offset="0.3" stop-color="#D4DEE9"/>
+      <stop offset="0.62" stop-color="#8D9BB0"/>
+      <stop offset="0.86" stop-color="#E4EBF3"/>
+      <stop offset="1" stop-color="#B4C0D1"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(972 186) rotate(90) scale(152 734)">
+      <stop stop-color="#E8EFF8" stop-opacity="0.54"/>
+      <stop offset="0.44" stop-color="#B8C6D9" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#B8C6D9" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow" x="42" y="0" width="1646" height="375" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="18" result="effect1_foregroundBlur"/>
+    </filter>
+  </defs>
+
+  <rect x="182" y="92" width="1460" height="188" rx="94" fill="url(#glow)"/>
+  <g filter="url(#softGlow)" opacity="0.28">
+    <text x="162" y="250" fill="#E6EDF7" font-size="198" font-family="Manrope, Arial, sans-serif" font-weight="800" letter-spacing="-8">madcore</text>
+  </g>
+  <text x="162" y="250" fill="url(#silverFill)" stroke="url(#silverStroke)" stroke-width="12" font-size="198" font-family="Manrope, Arial, sans-serif" font-weight="800" letter-spacing="-8">madcore</text>
+  <rect x="1332" y="108" width="226" height="110" rx="55" fill="#091018" stroke="url(#silverStroke)" stroke-width="10"/>
+  <text x="1393" y="181" fill="url(#silverFill)" font-size="58" font-family="Manrope, Arial, sans-serif" font-weight="800" letter-spacing="1">2.0</text>
+</svg>

@@ -1,0 +1,18 @@
+flowchart TD
+    A[Яндекс.Директ] --> B["/go TrafficGate"]
+    B --> C{"score_in"}
+    C -->|good / watch| D["Landing MADCORE"]
+    C -->|suspicious / blocked| E["/safe"]
+    D --> F[Matomo]
+    D --> G[Яндекс.Метрика]
+    D --> H["Server Events API"]
+    D --> I["Lead Form / CTA"]
+    I --> J[LeadQualityGate]
+    J --> K[(PostgreSQL)]
+    K --> L[Отчеты / Admin]
+    K --> M[Экспорт qualified leads]
+    M --> N["Офлайн-конверсии"]
+    N --> O[Оптимизация Яндекс.Директа]
+    P[GitHub Actions] --> Q[VPS /opt/madcore-gena]
+    Q --> R[Docker Compose]
+    R --> S[Nginx + App + Postgres + Matomo]

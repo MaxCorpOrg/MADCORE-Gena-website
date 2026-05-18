@@ -1,0 +1,98 @@
+<svg width="1254" height="1254" viewBox="0 0 1254 1254" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="110" y1="88" x2="1122" y2="1144" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111821"/>
+      <stop offset="0.5" stop-color="#090D12"/>
+      <stop offset="1" stop-color="#161E27"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(628 228) rotate(90) scale(286 380)">
+      <stop stop-color="#E6EEF8" stop-opacity="0.36"/>
+      <stop offset="0.42" stop-color="#B7C5D8" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#B7C5D8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="frame" x1="128" y1="128" x2="1102" y2="1116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8EFF8" stop-opacity="0.64"/>
+      <stop offset="0.52" stop-color="#90A1B8" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#F7FBFF" stop-opacity="0.42"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="232" y1="188" x2="984" y2="1028" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1A222C"/>
+      <stop offset="0.56" stop-color="#0C1117"/>
+      <stop offset="1" stop-color="#171F28"/>
+    </linearGradient>
+    <linearGradient id="box" x1="238" y1="246" x2="866" y2="862" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="0.18" stop-color="#D5DFEB"/>
+      <stop offset="0.48" stop-color="#8E9DB1"/>
+      <stop offset="0.78" stop-color="#E2EAF3"/>
+      <stop offset="1" stop-color="#A5B2C4"/>
+    </linearGradient>
+    <linearGradient id="vial" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="0.22" stop-color="#C7D2DF"/>
+      <stop offset="0.62" stop-color="#78889D"/>
+      <stop offset="0.86" stop-color="#E9F0F8"/>
+      <stop offset="1" stop-color="#A1AFC1"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F3F8FE"/>
+      <stop offset="1" stop-color="#6D7C92"/>
+    </linearGradient>
+    <pattern id="grid" width="68" height="68" patternUnits="userSpaceOnUse">
+      <path d="M68 0H0V68" stroke="#EDF3FB" stroke-opacity="0.05"/>
+    </pattern>
+  </defs>
+
+  <rect width="1254" height="1254" rx="52" fill="url(#bg)"/>
+  <rect width="1254" height="1254" rx="52" fill="url(#grid)"/>
+  <rect x="92" y="92" width="1070" height="1070" rx="58" fill="url(#halo)"/>
+  <rect x="126" y="126" width="1002" height="1002" rx="50" fill="#0A0E13" fill-opacity="0.54" stroke="url(#frame)" stroke-width="2"/>
+  <rect x="182" y="182" width="890" height="890" rx="42" fill="url(#panel)" stroke="#F7FBFF" stroke-opacity="0.08"/>
+
+  <g opacity="0.84">
+    <text x="252" y="286" fill="#F4F8FD" font-size="34" font-family="Manrope, Arial, sans-serif" font-weight="700" letter-spacing="7">MADCORE GENA</text>
+    <text x="252" y="336" fill="#9FAEC2" font-size="24" font-family="Manrope, Arial, sans-serif" font-weight="700" letter-spacing="5">SEPARATE REGION / SEPARATE ANALYTICS</text>
+  </g>
+
+  <circle cx="632" cy="280" r="146" fill="#DDE6F0" fill-opacity="0.08"/>
+  <circle cx="632" cy="280" r="118" stroke="#EAF1F9" stroke-opacity="0.2"/>
+  <circle cx="632" cy="280" r="88" stroke="#EAF1F9" stroke-opacity="0.12"/>
+
+  <g transform="translate(236 360)">
+    <rect x="0" y="0" width="710" height="458" rx="34" fill="#0F151B" stroke="#DCE5EF" stroke-opacity="0.12"/>
+    <rect x="32" y="32" width="646" height="394" rx="26" fill="url(#box)"/>
+    <text x="94" y="182" fill="#080B0F" font-size="132" font-family="Manrope, Arial, sans-serif" font-weight="800" letter-spacing="-5">MADCORE</text>
+    <text x="98" y="264" fill="#2A3440" font-size="62" font-family="Manrope, Arial, sans-serif" font-weight="700" letter-spacing="16">GENA</text>
+    <text x="98" y="328" fill="#3F4D5E" font-size="26" font-family="Manrope, Arial, sans-serif" font-weight="700" letter-spacing="5">SILVER VERSION</text>
+    <g opacity="0.42">
+      <rect x="494" y="102" width="10" height="190" rx="5" fill="#4C5B6C"/>
+      <rect x="526" y="82" width="6" height="210" rx="3" fill="#4C5B6C"/>
+      <rect x="554" y="64" width="4" height="228" rx="2" fill="#4C5B6C"/>
+      <rect x="580" y="48" width="3" height="244" rx="1.5" fill="#4C5B6C"/>
+    </g>
+  </g>
+
+  <ellipse cx="628" cy="930" rx="318" ry="94" fill="#CFD8E5" fill-opacity="0.16"/>
+  <ellipse cx="628" cy="930" rx="224" ry="58" fill="#0A0D12" fill-opacity="0.28"/>
+
+  <g transform="translate(230 814)">
+    <rect x="0" y="22" width="214" height="284" rx="34" fill="url(#vial)"/>
+    <rect x="28" y="48" width="158" height="228" rx="24" fill="#0F141A" fill-opacity="0.18"/>
+    <rect x="24" y="0" width="166" height="62" rx="20" fill="#0B1016"/>
+    <rect x="34" y="-18" width="146" height="46" rx="17" fill="url(#cap)"/>
+    <path d="M54 118H86" stroke="#0C1117" stroke-opacity="0.5" stroke-width="7" stroke-linecap="round"/>
+    <path d="M54 150H146" stroke="#0C1117" stroke-opacity="0.38" stroke-width="7" stroke-linecap="round"/>
+    <path d="M54 184H132" stroke="#0C1117" stroke-opacity="0.38" stroke-width="7" stroke-linecap="round"/>
+    <text x="52" y="242" fill="#4A5969" font-size="22" font-family="Manrope, Arial, sans-serif" font-weight="700" letter-spacing="4">GENA</text>
+  </g>
+
+  <g transform="translate(742 842) rotate(12)">
+    <rect x="0" y="22" width="192" height="254" rx="32" fill="url(#vial)"/>
+    <rect x="22" y="48" width="148" height="200" rx="22" fill="#0F141A" fill-opacity="0.16"/>
+    <rect x="20" y="0" width="152" height="54" rx="18" fill="#0B1016"/>
+    <rect x="30" y="-16" width="132" height="40" rx="15" fill="url(#cap)"/>
+    <path d="M46 122H142" stroke="#10161D" stroke-opacity="0.34" stroke-width="6" stroke-linecap="round"/>
+    <path d="M46 154H126" stroke="#10161D" stroke-opacity="0.34" stroke-width="6" stroke-linecap="round"/>
+    <text x="46" y="216" fill="#4A5969" font-size="21" font-family="Manrope, Arial, sans-serif" font-weight="700" letter-spacing="4">RF</text>
+  </g>
+</svg>

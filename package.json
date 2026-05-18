@@ -1,0 +1,46 @@
+{
+  "name": "madcore-gena-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "dev:legacy": "next dev",
+    "dev:start": "bash ./scripts/dev-start.sh",
+    "dev:stop": "bash ./scripts/dev-stop.sh",
+    "dev:status": "bash ./scripts/dev-status.sh",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "direct:sync-base-negative-keywords": "node ./scripts/sync-yandex-direct-base-negative-keywords.mjs",
+    "report:yandex-qualified": "bash ./scripts/export-qualified-leads-for-yandex.sh",
+    "report:traffic-quality": "bash ./scripts/server-refresh-traffic-sources-quality.sh"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.0",
+    "geoip-lite": "^1.4.10",
+    "next": "^15.5.18",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "ua-parser-js": "^2.0.9",
+    "zod": "^3.24.0"
+  },
+  "overrides": {
+    "postcss": "8.5.14"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.1.0",
+    "@types/geoip-lite": "^1.4.4",
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.30.0",
+    "eslint-config-next": "^15.5.18",
+    "postcss": "8.5.14",
+    "prisma": "^6.8.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,127 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: madcore_gena_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-madcore_gena}
+      POSTGRES_USER: ${POSTGRES_USER:-madcore_gena}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-madcore_gena} -d ${POSTGRES_DB:-madcore_gena}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID: ${NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID:-}
+        MATOMO_URL: ${MATOMO_URL:-}
+        MATOMO_SITE_ID: ${MATOMO_SITE_ID:-}
+        MATOMO_DIMENSION_CLICK_ID: ${MATOMO_DIMENSION_CLICK_ID:-}
+        MATOMO_DIMENSION_YCLID: ${MATOMO_DIMENSION_YCLID:-}
+        MATOMO_DIMENSION_UTM_SOURCE: ${MATOMO_DIMENSION_UTM_SOURCE:-}
+        MATOMO_DIMENSION_UTM_CAMPAIGN: ${MATOMO_DIMENSION_UTM_CAMPAIGN:-}
+        MATOMO_DIMENSION_UTM_CONTENT: ${MATOMO_DIMENSION_UTM_CONTENT:-}
+        MATOMO_DIMENSION_UTM_TERM: ${MATOMO_DIMENSION_UTM_TERM:-}
+        SAFE_MODE_DISABLE_MATOMO: ${SAFE_MODE_DISABLE_MATOMO:-true}
+    container_name: madcore_gena_app
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3001:3000"
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://127.0.0.1:3000/api/health >/dev/null 2>&1 || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: madcore_gena_nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "8081:80"
+      - "8444:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certbot/www:/var/www/certbot:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://127.0.0.1/ >/dev/null 2>&1 || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: madcore_gena_certbot
+    profiles: ["manual"]
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+
+  matomo_db:
+    image: mariadb:11
+    container_name: madcore_gena_matomo_db
+    restart: unless-stopped
+    profiles: ["analytics"]
+    environment:
+      MARIADB_DATABASE: ${MATOMO_DB_NAME:-matomo_gena}
+      MARIADB_USER: ${MATOMO_DB_USER:-matomo_gena}
+      MARIADB_PASSWORD: ${MATOMO_DB_PASSWORD:-change_me}
+      MARIADB_ROOT_PASSWORD: ${MATOMO_DB_ROOT_PASSWORD:-change_me}
+    volumes:
+      - matomo_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -u root -p${MATOMO_DB_ROOT_PASSWORD:-change_me} --silent"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+
+  matomo:
+    image: matomo:5-apache
+    container_name: madcore_gena_matomo
+    restart: unless-stopped
+    profiles: ["analytics"]
+    depends_on:
+      matomo_db:
+        condition: service_healthy
+    environment:
+      MATOMO_DATABASE_HOST: matomo_db
+      MATOMO_DATABASE_ADAPTER: mysql
+      MATOMO_DATABASE_TABLES_PREFIX: matomo_
+      MATOMO_DATABASE_USERNAME: ${MATOMO_DB_USER:-matomo_gena}
+      MATOMO_DATABASE_PASSWORD: ${MATOMO_DB_PASSWORD:-change_me}
+      MATOMO_DATABASE_DBNAME: ${MATOMO_DB_NAME:-matomo_gena}
+    volumes:
+      - matomo_data:/var/www/html
+    expose:
+      - "80"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "php -r '$$fp=@fsockopen(\"127.0.0.1\",80); if(!$$fp){exit(1);} fclose($$fp);'"
+        ]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+  matomo_data:
+  matomo_db_data:

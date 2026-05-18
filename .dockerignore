@@ -1,0 +1,17 @@
+node_modules
+.next
+.next-dev
+.git
+.data
+.tmp
+.env*
+!.env.example
+certbot
+backups
+coverage
+npm-debug.log*
+docs/deliverables
+f.png
+hero-img.png
+product-img.png
+надпись1.png
