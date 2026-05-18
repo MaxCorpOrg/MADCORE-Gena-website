@@ -6,8 +6,10 @@
 
 - сервер: `151.247.197.153`
 - директория проекта на сервере: `/opt/madcore-gena`
-- базовый домен по текущему этапу: `https://gena.madcore-kavkaz.ru`
+- временный preview-адрес по текущему этапу: `https://gena.madcore-kavkaz.ru`
 - `www`: `https://www.gena.madcore-kavkaz.ru`
+
+Этот адрес нужен только для проверки и просмотра сайта на текущем этапе. Финальный домен проекта должен быть заменен отдельно через `.env` и server-side конфигурацию.
 
 ## Изоляция от основного сайта
 
@@ -29,8 +31,9 @@
 - `.env` в `/opt/madcore-gena`
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
-- `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID`
+- `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=109282367` для текущего preview-контура
 - `MATOMO_SITE_ID`
+- финальный `SITE_DOMAIN` / `SITE_WWW_DOMAIN` / `SITE_CERT_NAME`
 - при необходимости `YANDEX_DIRECT_CLIENT_LOGIN`
 
 ## Безопасная выкладка
@@ -63,9 +66,10 @@ docker compose exec -T app npx prisma migrate deploy
 
 ## Edge proxy
 
-Чтобы сделать новый поддомен публичным, на сервере нужен отдельный доменный маршрут до нового контура. Предпочтительный вариант:
+Чтобы сделать новый домен публичным, на сервере нужен отдельный доменный маршрут до нового контура. Предпочтительный вариант:
 
-- основной входной proxy принимает `gena.madcore-kavkaz.ru`;
+- до выбора финального домена можно использовать текущий preview-host;
+- после выбора домена основной входной proxy принимает уже финальный host;
 - дальше запросы уходят в новый контур `MADCORE Gena`;
 - основной сайт `madcore-kavkaz.ru` при этом остается без изменений по бизнес-логике.
 

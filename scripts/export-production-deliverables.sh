@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUTPUT_DIR="${ROOT_DIR}/docs/deliverables"
-TARGET_URL="${1:-https://gena.madcore-kavkaz.ru}"
+TARGET_URL="${1:-${PUBLIC_BASE_URL:-https://gena.madcore-kavkaz.ru}}"
 STAMP="${2:-$(date +%F)}"
 SCREENSHOT_WIDTH="${SCREENSHOT_WIDTH:-1440}"
 SCREENSHOT_HEIGHT="${SCREENSHOT_HEIGHT:-4200}"

@@ -12,6 +12,7 @@
 - hero, product и wordmark переведены в серебряный стиль без гор;
 - активные документы нового проекта очищены, legacy-материалы убраны в `docs/archive-origin/`;
 - локальный `git` инициализирован и подключен к `git@github.com:MaxCorpOrg/MADCORE-Gena-website.git`.
+- через API Яндекс.Метрики создан отдельный счетчик `109282367` и восемь отдельных JS-целей проекта.
 
 ## Что подтверждено
 
@@ -26,8 +27,12 @@
 ## Что еще остается внешним шагом
 
 - отдельный Telegram-бот и его токены;
-- отдельный счетчик Яндекс.Метрики;
 - отдельный `MATOMO_SITE_ID`;
 - production `.env`;
 - server-side deployment в `/opt/madcore-gena`;
-- публичный доменный proxy для `gena.madcore-kavkaz.ru`.
+- финальный домен и публичный доменный proxy под него.
+
+## Внешние блокеры
+
+- Matomo admin-учетка не имеет `superuser`-прав для `SitesManager.addSite`.
+- Запись в `/opt/madcore-gena` на текущем хосте требует `sudo`.

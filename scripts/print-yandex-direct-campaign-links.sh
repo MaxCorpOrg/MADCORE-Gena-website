@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-BASE_URL="${1:-https://gena.madcore-kavkaz.ru}"
+BASE_URL="${1:-${PUBLIC_BASE_URL:-https://gena.madcore-kavkaz.ru}}"
 
 base="${BASE_URL%/}/go"
 

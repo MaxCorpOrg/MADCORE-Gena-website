@@ -13,9 +13,10 @@
 - Проект: отдельный сайт `MADCORE Gena`
 - Локальный путь: `/home/max/MADCORE RF`
 - Целевой remote: `git@github.com:MaxCorpOrg/MADCORE-Gena-website.git`
-- Базовое доменное допущение по текущему checkpoint:
+- Временный preview-адрес по текущему checkpoint:
   - сайт: `https://gena.madcore-kavkaz.ru`
   - `www`: `https://www.gena.madcore-kavkaz.ru`
+  - это не финальный домен проекта
 - Matomo по этой точке использует общий хост `https://analytics.madcore-kavkaz.ru`, но для `MADCORE Gena` нужен отдельный `site id`.
 
 ## Обязательный маршрут входа

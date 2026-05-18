@@ -6,9 +6,15 @@
 
 Нельзя подключать новый сайт к `site id` исходного `MADCORE-website`.
 
+Текущее состояние:
+
+- admin-логин в Matomo подтвержден;
+- автоматический вызов `SitesManager.addSite` возвращает `401` с требованием `superuser`-прав;
+- поэтому отдельный `MATOMO_SITE_ID` пока не создан автоматически.
+
 ## Что создать в Matomo
 
-1. Новый сайт для `https://gena.madcore-kavkaz.ru`.
+1. Новый сайт для текущего preview-адреса `https://gena.madcore-kavkaz.ru` или сразу для финального домена, если он уже выбран.
 2. Отдельный `MATOMO_SITE_ID`.
 3. При необходимости отдельные custom dimensions для:
    - `click_id`
@@ -35,6 +41,6 @@ MATOMO_DIMENSION_UTM_TERM=<optional_dimension_id>
 ## Что проверить
 
 - новый сайт виден отдельно от исходного `MADCORE`;
-- page view идут по домену `gena.madcore-kavkaz.ru`;
+- page view идут по текущему preview-host или по финальному домену после замены;
 - события `telegram_click`, `whatsapp_click`, `max_click`, `call_click`, `form_submit`, `lead` приходят отдельно;
 - `/go` сохраняет в Matomo значения `click_id`, `yclid` и UTM-параметров, если включены соответствующие измерения.

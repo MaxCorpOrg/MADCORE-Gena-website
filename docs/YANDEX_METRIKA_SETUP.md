@@ -4,9 +4,14 @@
 
 Нельзя использовать счетчик исходного сайта. Для `MADCORE Gena` требуется отдельный счетчик под новый домен или поддомен.
 
+На текущем этапе уже создан отдельный preview-счетчик:
+
+- `109282367` — `MADCORE Gena preview`
+- host: `gena.madcore-kavkaz.ru`
+
 ## Что создать
 
-- новый счетчик для `gena.madcore-kavkaz.ru`
+- новый счетчик для текущего preview-адреса `gena.madcore-kavkaz.ru` или сразу для финального домена, если он уже известен
 - отдельные цели:
   - `telegram_click`
   - `whatsapp_click`
@@ -17,10 +22,12 @@
   - `form_submit`
   - `lead`
 
+Эти цели уже заведены в счетчике `109282367`.
+
 ## Что записать в `.env`
 
 ```env
-NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=<новый_id_счетчика>
+NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=109282367
 YANDEX_METRIKA_TOKEN=<токен_если_нужен_для_api>
 ```
 

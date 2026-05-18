@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BASE_URL="${1:-https://gena.madcore-kavkaz.ru}"
+DEFAULT_BASE_URL="${PUBLIC_BASE_URL:-https://gena.madcore-kavkaz.ru}"
+BASE_URL="${1:-$DEFAULT_BASE_URL}"
 BASE_URL="${BASE_URL%/}"
 CURL_UA="${CURL_UA:-Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125 Safari/537.36 MADCOREGenaAdtechSmoke/1.0}"
 METRIKA_COUNTER_ID="${METRIKA_COUNTER_ID:-}"

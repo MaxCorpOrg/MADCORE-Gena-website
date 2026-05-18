@@ -4,10 +4,12 @@
 
 Целевой репозиторий: `git@github.com:MaxCorpOrg/MADCORE-Gena-website.git`
 
-Базовое доменное допущение текущего этапа:
+Временный preview-адрес текущего этапа:
 
-- production: `https://gena.madcore-kavkaz.ru`
+- preview: `https://gena.madcore-kavkaz.ru`
 - `www`: `https://www.gena.madcore-kavkaz.ru`
+
+Это текущий адрес для проверки сайта. Финальный домен для `MADCORE Gena` будет другим и должен задаваться через окружение, а не считаться зафиксированным в проекте.
 
 ## Кратко
 
@@ -54,13 +56,13 @@
 
 ## Что еще требуется до production
 
-- создать отдельный GitHub-репозиторий `MaxCorpOrg/MADCORE-Gena-website`;
+- удаленный GitHub-репозиторий уже создан и подключен: `MaxCorpOrg/MADCORE-Gena-website`;
 - создать отдельный счетчик Яндекс.Метрики и цели;
 - создать отдельный `site id` в Matomo;
 - создать отдельного Telegram-бота и заполнить `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`;
 - заполнить production `.env` для нового проекта;
 - развернуть проект в `/opt/madcore-gena`;
-- добавить доменный proxy-маршрут на сервере для нового поддомена;
+- заменить временный preview-host на финальный домен и добавить под него доменный proxy-маршрут;
 - выполнить smoke-проверки.
 
 ## Команды
@@ -78,6 +80,12 @@ npm run build
 npm run dev:start
 npm run dev:status
 npm run dev:stop
+```
+
+Для временного preview-контура можно стартовать от отдельного шаблона окружения:
+
+```bash
+cp .env.preview.example .env
 ```
 
 ## Важные файлы

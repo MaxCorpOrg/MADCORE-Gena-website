@@ -1,6 +1,8 @@
+const PREVIEW_SITE_DOMAIN = "gena.madcore-kavkaz.ru";
+
 export const siteContent = {
   productName: "MADCORE Gena",
-  siteDomain: "gena.madcore-kavkaz.ru",
+  siteDomain: PREVIEW_SITE_DOMAIN,
   heroImagePath: "/images/hero-gena-silver-v1.svg",
   siteTitle: "MADCORE Gena - консультация и сопровождение по РФ",
   siteDescription:
@@ -64,12 +66,13 @@ export function getSiteRuntimeConfig() {
   const publicPhone = process.env.PUBLIC_PHONE || "+7-904-244-04-44";
   const dialPhone = toDialPhone(publicPhone);
   const publicAddress = process.env.PUBLIC_ADDRESS || siteContent.officeAddress;
+  const siteDomain = process.env.SITE_DOMAIN || siteContent.siteDomain;
 
   return {
     productName,
     publicPrice,
-    siteDomain: siteContent.siteDomain,
-    publicBaseUrl: process.env.PUBLIC_BASE_URL || `https://${siteContent.siteDomain}`,
+    siteDomain,
+    publicBaseUrl: process.env.PUBLIC_BASE_URL || `https://${siteDomain}`,
     telegramUrl: process.env.TELEGRAM_GROUP_URL || "https://t.me/vorgesar",
     whatsappUrl: process.env.WHATSAPP_URL || "https://wa.me/79042440444",
     maxUrl:

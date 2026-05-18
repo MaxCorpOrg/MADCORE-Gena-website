@@ -21,7 +21,7 @@
 - локальный путь: `/home/max/MADCORE RF`
 - целевой remote: `git@github.com:MaxCorpOrg/MADCORE-Gena-website.git`
 - стек: `Next.js + TypeScript + Tailwind + Prisma + PostgreSQL`
-- основное доменное допущение по текущему этапу: `https://gena.madcore-kavkaz.ru`
+- временный preview-адрес по текущему этапу: `https://gena.madcore-kavkaz.ru`
 
 ## Что уже сделано
 
@@ -46,6 +46,7 @@
 - отдельный счетчик Яндекс.Метрики и отдельные цели пока не созданы;
 - отдельный `site id` в Matomo пока не создан;
 - production deployment и DNS cutover пока не выполнены;
+- финальный домен проекта пока не выбран и не заведен в конфигурации;
 - внешние production-интеграции еще не заполнены.
 
 ## Что уже подтверждено дополнительно
@@ -54,6 +55,8 @@
 - `npm run lint` и `npm run build` проходят;
 - `bash ./scripts/repo-adtech-audit.sh` проходит;
 - first screen визуально проверен в браузере: серебряная версия без гор активна.
+- через API Яндекс.Метрики уже создан отдельный счетчик `109282367` и заведены отдельные JS-цели проекта.
+- Matomo admin-доступ подтвержден, но для `SitesManager.addSite` не хватает `superuser`-прав.
 
 ## Что обязательно сделать перед серверными действиями
 

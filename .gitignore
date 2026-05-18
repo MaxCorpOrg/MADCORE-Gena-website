@@ -6,6 +6,7 @@ out
 .tmp
 .env*
 !.env.example
+!.env.preview.example
 certbot
 backups
 .DS_Store

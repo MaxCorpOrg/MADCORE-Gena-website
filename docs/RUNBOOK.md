@@ -17,6 +17,12 @@ npm run dev:status
 npm run dev:stop
 ```
 
+Для preview-контура можно взять готовую основу:
+
+```bash
+cp .env.preview.example .env
+```
+
 ## Smoke-проверки
 
 ```bash
@@ -25,6 +31,8 @@ METRIKA_COUNTER_ID=<new_counter_id> ./scripts/production-adtech-smoke.sh https:/
 ```
 
 Если новый счетчик Яндекс.Метрики еще не создан, `production-adtech-smoke.sh` допускает запуск без `METRIKA_COUNTER_ID` и пропускает live-проверку presence-кода.
+
+Для финального домена эти же сценарии нужно запускать либо с первым аргументом, либо через обновленный `PUBLIC_BASE_URL` в `.env`.
 
 ## Что проверять после развертывания
 
@@ -43,4 +51,5 @@ METRIKA_COUNTER_ID=<new_counter_id> ./scripts/production-adtech-smoke.sh https:/
 - `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID`
 - `YANDEX_METRIKA_TOKEN`, если нужен API-доступ
 - `YANDEX_DIRECT_TOKEN`
-- `PUBLIC_BASE_URL=https://gena.madcore-kavkaz.ru`
+- `PUBLIC_BASE_URL=https://gena.madcore-kavkaz.ru` на этапе preview
+- `SITE_DOMAIN`, `SITE_WWW_DOMAIN`, `SITE_CERT_NAME` под текущий host
