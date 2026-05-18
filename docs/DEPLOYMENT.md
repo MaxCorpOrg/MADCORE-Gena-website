@@ -39,19 +39,24 @@
   - `MATOMO_SITE_ID=2`
   - `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=109282367`
   - preview-host значения `SITE_DOMAIN`, `SITE_WWW_DOMAIN`, `PUBLIC_BASE_URL`
-- `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` пока оставлены пустыми;
+- через `BotFather` создан отдельный бот `@MadcoreGenaLeadsBot`;
+- в `.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
 - выполнена сборка и запущены `postgres + app`;
+- `madcore_gena_app` пересоздан с новым Telegram-конфигом;
 - через Timeweb DNS подняты:
   - `gena.madcore-kavkaz.ru`
   - `www.gena.madcore-kavkaz.ru`
 - через Certbot выпущен сертификат `gena.madcore-kavkaz.ru`;
 - общий `madcore_nginx` расширен под новый preview-host.
+- live test `2026-05-18` подтвердил:
+  - `POST http://127.0.0.1:3001/api/lead` возвращает `200`;
+  - notify о заявке приходит в `@MadcoreGenaLeadsBot`.
 
 ## Что заполнять в `/opt/madcore-gena/.env`
 
 - отдельные DB-пароли для нового контура;
-- `TELEGRAM_BOT_TOKEN`
-- `TELEGRAM_CHAT_ID`
+- `TELEGRAM_BOT_TOKEN` уже задан для `@MadcoreGenaLeadsBot`
+- `TELEGRAM_CHAT_ID` уже задан для текущего preview-inbox
 - `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=109282367`
 - `MATOMO_SITE_ID=2`
 - `SITE_DOMAIN=gena.madcore-kavkaz.ru`
@@ -67,6 +72,14 @@ ssh root@151.247.197.153
 cd /opt/madcore-gena
 docker compose build app
 docker compose up -d app
+```
+
+Пересоздание app после смены Telegram-переменных без rebuild:
+
+```bash
+ssh root@151.247.197.153
+cd /opt/madcore-gena
+docker compose up -d --force-recreate app
 ```
 
 Проверка контейнеров:
@@ -103,4 +116,4 @@ docker exec madcore_nginx nginx -s reload
 4. Выпустить новый сертификат.
 5. Обновить host-routing в `/opt/madcore/nginx.conf`.
 6. При необходимости обновить host/URL в Метрике и Matomo.
-7. Заполнить токены отдельного Telegram-бота и перепроверить live lead notify.
+7. Если receiving-chat будет меняться, обновить `TELEGRAM_CHAT_ID` и повторно проверить live lead notify.

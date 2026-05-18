@@ -61,6 +61,9 @@
   - `madcore_gena_postgres`
   - `madcore_gena_app`
 - `madcore_gena_app` опубликован на `127.0.0.1:3001` и подключен к сети `madcore_default` c alias `genaapp`;
+- через `BotFather` создан отдельный Telegram-бот `@MadcoreGenaLeadsBot`;
+- в `/opt/madcore-gena/.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
+- `madcore_gena_app` на VPS пересоздан с новым Telegram-конфигом;
 - общий ingress основного сайта расширен под preview-host без изменения бизнес-логики основного `MADCORE`;
 - выпущен отдельный Let's Encrypt сертификат для:
   - `gena.madcore-kavkaz.ru`
@@ -72,12 +75,13 @@
   - `bash ./scripts/repo-adtech-audit.sh`
   - `./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru`
   - `METRIKA_COUNTER_ID=109282367 ./scripts/production-adtech-smoke.sh https://gena.madcore-kavkaz.ru`
+- live test `2026-05-18` подтвердил полный bot-flow:
+  - внутренний `POST http://127.0.0.1:3001/api/lead` на VPS вернул `200` и создал `lead id = 1`;
+  - уведомление о новой заявке дошло в `@MadcoreGenaLeadsBot`;
 - подтверждено, что основной сайт `https://madcore-kavkaz.ru` после добавления preview-host остается живым.
 
 ## Что еще не завершено
 
-- отдельный Telegram-бот еще не создан;
-- `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` в preview `.env` пока пустые, поэтому live preview принимает лиды, но Telegram notify path пропускается;
 - финальный домен проекта еще не задан;
 - финальный cutover с preview-host на постоянный домен еще не выполнен;
 - после выбора финального домена нужно обновить доменные привязки:
@@ -89,15 +93,14 @@
 ## На чем остановились
 
 - публичный silver-preview уже живет на `https://gena.madcore-kavkaz.ru`;
-- кодовая база, отдельный runtime, DNS, SSL, Matomo и Метрика уже разведены;
+- кодовая база, отдельный runtime, DNS, SSL, Matomo, Метрика и Telegram bot-flow уже разведены;
 - следующий приоритет теперь внешний:
-  - отдельный Telegram-бот;
   - выбор финального домена;
   - финальный доменный cutover.
 
 ## Что делать дальше
 
-1. Создать отдельного Telegram-бота и заполнить `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` в `/opt/madcore-gena/.env`.
-2. Перезапустить `madcore_gena_app` и проверить реальную отправку test lead в новый bot-flow.
-3. После выбора финального домена заменить preview-host в DNS, TLS, ingress и `.env`.
-4. Обновить host/URL в Метрике и Matomo под финальный домен, если проект не остается на текущем preview-поддомене.
+1. Выбрать финальный домен проекта.
+2. После выбора финального домена заменить preview-host в DNS, TLS, ingress и `.env`.
+3. Обновить host/URL в Метрике и Matomo под финальный домен, если проект не остается на текущем preview-поддомене.
+4. Если receiving-chat для лидов должен быть не текущая личка `AK5`, запустить нового бота из нужного чата и обновить только `TELEGRAM_CHAT_ID` в `/opt/madcore-gena/.env`.

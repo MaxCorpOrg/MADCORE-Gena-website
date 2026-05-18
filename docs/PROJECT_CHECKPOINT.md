@@ -21,6 +21,7 @@
   - `madcore_gena_postgres`
   - `madcore_gena_app`
 - новый app-контейнер живет в `/opt/madcore-gena` и доступен через общий ingress основного сервера;
+- отдельный Telegram bot-flow уже работает через `@MadcoreGenaLeadsBot`;
 - проектный `madcore_gena_nginx` в коде остается подготовленным, но в текущем live preview TLS и host-routing обслуживаются общим `madcore_nginx`.
 
 ## Сделано
@@ -43,6 +44,9 @@
 - выпущен Let's Encrypt сертификат для preview-host и `www`, действующий до `2026-08-16`;
 - на сервере развернут preview-контур в `/opt/madcore-gena`;
 - общий ingress сервера проксирует preview-host на `genaapp:3000`.
+- через `BotFather` создан отдельный бот `@MadcoreGenaLeadsBot`;
+- в `/opt/madcore-gena/.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
+- `madcore_gena_app` пересоздан на VPS с новым Telegram-конфигом.
 
 ## Что проверено
 
@@ -55,18 +59,17 @@
 - `https://www.gena.madcore-kavkaz.ru/` отдает `301` на apex preview-host;
 - `./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru` проходит;
 - `METRIKA_COUNTER_ID=109282367 ./scripts/production-adtech-smoke.sh https://gena.madcore-kavkaz.ru` проходит;
+- live test `2026-05-18` через server-side `POST /api/lead` вернул `200` и создал `lead id = 1`;
+- уведомление о тестовой заявке пришло в `@MadcoreGenaLeadsBot`;
 - основной production `https://madcore-kavkaz.ru` после добавления preview-маршрутов отвечает штатно.
 
 ## Не завершено
 
-- нет отдельного Telegram-бота;
-- `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` не заполнены;
 - финальный live-домен не выбран;
 - финальный доменный cutover не выполнен.
 
 ## Что делать дальше
 
-1. Создать отдельного Telegram-бота и заполнить его токены в `/opt/madcore-gena/.env`.
-2. Перезапустить `madcore_gena_app` и проверить test lead до нового бота.
-3. После выбора финального домена заменить preview-host в DNS, TLS, ingress и `.env`.
-4. При необходимости обновить привязки Метрики и Matomo под финальный домен.
+1. После выбора финального домена заменить preview-host в DNS, TLS, ingress и `.env`.
+2. При необходимости обновить привязки Метрики и Matomo под финальный домен.
+3. Если лиды должны приходить не в текущую личку `AK5`, запустить бота из нового чата и обновить `TELEGRAM_CHAT_ID`.
