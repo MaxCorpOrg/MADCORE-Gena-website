@@ -21,6 +21,7 @@
   - `madcore_gena_postgres`
   - `madcore_gena_app`
 - новый app-контейнер живет в `/opt/madcore-gena` и доступен через общий ingress основного сервера;
+- подключение `madcore_gena_app` к внешней сети `madcore_default` с alias `genaapp` теперь закреплено прямо в `docker-compose.yml`;
 - отдельный Telegram bot-flow уже работает через `@MadcoreGenaLeadsBot`;
 - проектный `madcore_gena_nginx` в коде остается подготовленным, но в текущем live preview TLS и host-routing обслуживаются общим `madcore_nginx`.
 
@@ -61,6 +62,8 @@
 - `METRIKA_COUNTER_ID=109282367 ./scripts/production-adtech-smoke.sh https://gena.madcore-kavkaz.ru` проходит;
 - live test `2026-05-18` через server-side `POST /api/lead` вернул `200` и создал `lead id = 1`;
 - уведомление о тестовой заявке пришло в `@MadcoreGenaLeadsBot`;
+- после server-side `app recreate` routing preview-host восстановлен и повторный production smoke снова прошел штатно;
+- дополнительный post-fix test lead после обновленного `docker-compose.yml` создал `lead id = 2`, и notify снова дошел в `@MadcoreGenaLeadsBot`;
 - основной production `https://madcore-kavkaz.ru` после добавления preview-маршрутов отвечает штатно.
 
 ## Не завершено

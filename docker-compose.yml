@@ -41,6 +41,11 @@ services:
       - "127.0.0.1:3001:3000"
     expose:
       - "3000"
+    networks:
+      default: {}
+      madcore_default:
+        aliases:
+          - genaapp
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O- http://127.0.0.1:3000/api/health >/dev/null 2>&1 || exit 1"]
       interval: 20s
@@ -127,3 +132,7 @@ volumes:
   postgres_data:
   matomo_data:
   matomo_db_data:
+
+networks:
+  madcore_default:
+    external: true

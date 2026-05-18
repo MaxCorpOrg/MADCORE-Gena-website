@@ -61,6 +61,7 @@
   - `madcore_gena_postgres`
   - `madcore_gena_app`
 - `madcore_gena_app` опубликован на `127.0.0.1:3001` и подключен к сети `madcore_default` c alias `genaapp`;
+- `docker-compose.yml` теперь явно закрепляет подключение `madcore_gena_app` к внешней сети `madcore_default` с alias `genaapp`, чтобы preview-host не терял routing после `app recreate`;
 - через `BotFather` создан отдельный Telegram-бот `@MadcoreGenaLeadsBot`;
 - в `/opt/madcore-gena/.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
 - `madcore_gena_app` на VPS пересоздан с новым Telegram-конфигом;
@@ -78,6 +79,10 @@
 - live test `2026-05-18` подтвердил полный bot-flow:
   - внутренний `POST http://127.0.0.1:3001/api/lead` на VPS вернул `200` и создал `lead id = 1`;
   - уведомление о новой заявке дошло в `@MadcoreGenaLeadsBot`;
+- после обновления Telegram-переменных и фикса сети `genaapp` повторный `./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru` снова проходит;
+- дополнительный post-fix live test `2026-05-18` после пересоздания `app` на обновленном `docker-compose.yml` тоже прошел:
+  - внутренний `POST http://127.0.0.1:3001/api/lead` вернул `200` и создал `lead id = 2`;
+  - уведомление снова пришло в `@MadcoreGenaLeadsBot`;
 - подтверждено, что основной сайт `https://madcore-kavkaz.ru` после добавления preview-host остается живым.
 
 ## Что еще не завершено

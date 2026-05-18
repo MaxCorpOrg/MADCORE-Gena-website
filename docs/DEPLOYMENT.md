@@ -23,6 +23,7 @@
   - `madcore_gena_app`
 - `madcore_gena_app` опубликован на `127.0.0.1:3001`;
 - контейнер `madcore_gena_app` дополнительно подключен к сети `madcore_default` с alias `genaapp`;
+- это подключение теперь описано прямо в `docker-compose.yml`, а не держится на ручном `docker network connect`;
 - публичный host-routing и TLS выполняет общий ingress основного сайта:
   - файл `/opt/madcore/nginx.conf`
   - контейнер `madcore_nginx`
