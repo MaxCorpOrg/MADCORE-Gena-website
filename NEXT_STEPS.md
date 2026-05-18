@@ -4,31 +4,29 @@
 
 ## Ближайший приоритет
 
-Довести `MADCORE Gena` от локально отделенной копии до полноценного независимого production-контура.
+Довести уже работающий public preview `MADCORE Gena` до финального независимого домена и отдельного bot-flow.
 
 ## Что делать дальше
 
-1. Создать GitHub-репозиторий `MaxCorpOrg/MADCORE-Gena-website` и привязать `origin`.
-2. Создать отдельный Telegram-бот для заявок и заполнить:
+1. Создать отдельный Telegram-бот для заявок.
+2. Заполнить в `/opt/madcore-gena/.env`:
    - `TELEGRAM_BOT_TOKEN`
    - `TELEGRAM_CHAT_ID`
-3. Создать отдельный счетчик Яндекс.Метрики и цели:
-   - `telegram_click`
-   - `whatsapp_click`
-   - `max_click`
-   - `call_click`
-   - `consultation_click`
-   - `form_start`
-   - `form_submit`
-   - `lead`
-4. Создать отдельный сайт в Matomo и получить `MATOMO_SITE_ID`.
-5. Подготовить production `.env` для `/opt/madcore-gena`.
-6. Развернуть проект на сервере.
-7. После выбора финального домена заменить временный preview-host и добавить под него доменный proxy.
-8. Прогнать smoke и adtech-smoke проверки.
+3. Перезапустить `madcore_gena_app` и проверить test lead на новый бот.
+4. Выбрать финальный домен проекта.
+5. После выбора домена заменить preview-host в:
+   - DNS
+   - TLS
+   - `/opt/madcore-gena/.env`
+   - `/opt/madcore/nginx.conf`
+6. Определиться с аналитикой после смены домена:
+   - оставить счетчик Метрики `109282367` и обновить host
+   - или создать отдельный финальный счетчик
+   - обновить URL сайта в Matomo `site id = 2` или завести отдельный финальный сайт
+7. Прогнать финальные smoke и adtech-smoke проверки уже на постоянном домене.
 
 ## Что не делать
 
-- не править текущий боевой сайт в `/home/max/MADCORE`, если это не нужно для серверного proxy;
-- не переиспользовать старые `cmp` и старый счетчик Метрики;
-- не публиковать проект с пустыми значениями `TELEGRAM_BOT_TOKEN`, `MATOMO_SITE_ID` и `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID`.
+- не править текущий боевой сайт в `/home/max/MADCORE`, если это не нужно для host-routing preview или финального домена;
+- не переиспользовать старые `cmp`, старый счетчик Метрики и старый Matomo `site id`;
+- не оставлять финальный live-контур на пустых `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID`.

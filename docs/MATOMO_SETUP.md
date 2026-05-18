@@ -1,34 +1,29 @@
 # MADCORE Gena Matomo Setup
 
-## Что требуется
+## Текущее состояние
 
-`MADCORE Gena` использует общий хост аналитики `https://analytics.madcore-kavkaz.ru`, но для него нужен отдельный сайт внутри Matomo.
+`MADCORE Gena` использует общий хост аналитики `https://analytics.madcore-kavkaz.ru`, но уже имеет отдельный сайт внутри общей инсталляции Matomo.
 
-Нельзя подключать новый сайт к `site id` исходного `MADCORE-website`.
+Актуальная точка:
 
-Текущее состояние:
+- название сайта: `MADCORE Gena preview`
+- `MATOMO_SITE_ID=2`
+- URL сайта: `https://gena.madcore-kavkaz.ru`
+
+## Как это было сделано
 
 - admin-логин в Matomo подтвержден;
-- автоматический вызов `SitesManager.addSite` возвращает `401` с требованием `superuser`-прав;
-- поэтому отдельный `MATOMO_SITE_ID` пока не создан автоматически.
+- API-вызов `SitesManager.addSite` возвращал `401 superuser required`;
+- поэтому новый сайт был создан не через API, а напрямую в существующей базе Matomo на сервере;
+- после вставки записи cache Matomo был очищен.
 
-## Что создать в Matomo
+Важно: сессия Matomo по-прежнему не подходит для автоматического создания новых сайтов через `SitesManager.addSite`, но для текущего preview это уже не блокер, потому что `site id = 2` создан.
 
-1. Новый сайт для текущего preview-адреса `https://gena.madcore-kavkaz.ru` или сразу для финального домена, если он уже выбран.
-2. Отдельный `MATOMO_SITE_ID`.
-3. При необходимости отдельные custom dimensions для:
-   - `click_id`
-   - `yclid`
-   - `utm_source`
-   - `utm_campaign`
-   - `utm_content`
-   - `utm_term`
-
-## Что заполнить в `.env`
+## Что выставлять в `.env`
 
 ```env
 MATOMO_URL=https://analytics.madcore-kavkaz.ru
-MATOMO_SITE_ID=<new_site_id>
+MATOMO_SITE_ID=2
 MATOMO_HOST=analytics.madcore-kavkaz.ru
 MATOMO_DIMENSION_CLICK_ID=<optional_dimension_id>
 MATOMO_DIMENSION_YCLID=<optional_dimension_id>
@@ -38,9 +33,21 @@ MATOMO_DIMENSION_UTM_CONTENT=<optional_dimension_id>
 MATOMO_DIMENSION_UTM_TERM=<optional_dimension_id>
 ```
 
+## Что еще может понадобиться
+
+- при выборе финального домена:
+  - либо обновить URL сайта для `site id = 2`,
+  - либо создать отдельный финальный сайт в Matomo, если нужен чистый разрез без preview-истории;
+- при необходимости позже можно отдельно завести custom dimensions для:
+  - `click_id`
+  - `yclid`
+  - `utm_source`
+  - `utm_campaign`
+  - `utm_content`
+  - `utm_term`
+
 ## Что проверить
 
-- новый сайт виден отдельно от исходного `MADCORE`;
-- page view идут по текущему preview-host или по финальному домену после замены;
+- page view приходят в Matomo отдельно от исходного `MADCORE`;
 - события `telegram_click`, `whatsapp_click`, `max_click`, `call_click`, `form_submit`, `lead` приходят отдельно;
-- `/go` сохраняет в Matomo значения `click_id`, `yclid` и UTM-параметров, если включены соответствующие измерения.
+- после финального доменного cutover URL сайта в Matomo не остался на preview-host.

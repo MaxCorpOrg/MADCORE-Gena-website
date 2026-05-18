@@ -5,81 +5,102 @@
 ## Кратко
 
 - сервер: `151.247.197.153`
-- директория проекта на сервере: `/opt/madcore-gena`
-- временный preview-адрес по текущему этапу: `https://gena.madcore-kavkaz.ru`
-- `www`: `https://www.gena.madcore-kavkaz.ru`
+- server directory проекта: `/opt/madcore-gena`
+- live preview:
+  - `https://gena.madcore-kavkaz.ru`
+  - `https://www.gena.madcore-kavkaz.ru`
+- preview TLS выпущен до `2026-08-16`
 
-Этот адрес нужен только для проверки и просмотра сайта на текущем этапе. Финальный домен проекта должен быть заменен отдельно через `.env` и server-side конфигурацию.
+Этот адрес нужен как текущий публичный preview для проверки сайта. Финальный домен проекта должен быть заменен позже через `.env`, DNS, SSL и ingress.
 
-## Изоляция от основного сайта
+## Текущая схема выкладки
 
-Новый проект не должен забирать себе `80/443`, занятые основным `MADCORE`, без отдельного proxy-слоя. Поэтому в текущей подготовке:
+Новый проект не забирает себе `80/443` напрямую. Реальная рабочая схема на `2026-05-18` такая:
 
-- `app` публикуется на `127.0.0.1:3001`
-- `nginx` проекта слушает `8081/8444`
+- в `/opt/madcore-gena` живет отдельный runtime нового проекта;
+- `docker compose` проекта поднимает:
+  - `madcore_gena_postgres`
+  - `madcore_gena_app`
+- `madcore_gena_app` опубликован на `127.0.0.1:3001`;
+- контейнер `madcore_gena_app` дополнительно подключен к сети `madcore_default` с alias `genaapp`;
+- публичный host-routing и TLS выполняет общий ingress основного сайта:
+  - файл `/opt/madcore/nginx.conf`
+  - контейнер `madcore_nginx`
+- preview-host `gena.madcore-kavkaz.ru` проксируется из общего ingress на `http://genaapp:3000`.
 
-Это позволяет держать второй сайт на том же сервере отдельно от текущего production.
+Важно: проектный `madcore_gena_nginx` и порты `8081/8444` в кодовой базе остаются подготовленной опцией, но в текущем live preview не используются как публичная входная точка.
 
-## Текущий host-side блокер
+## Что уже сделано на сервере
 
-На сервере подтверждено, что пользователь `max` не может создать `/opt/madcore-gena` без `sudo`: система запрашивает пароль для privileged-операций.
+- создан `/opt/madcore-gena`;
+- загружен код проекта;
+- создан отдельный `/opt/madcore-gena/.env`;
+- в `.env` выставлены:
+  - `MATOMO_SITE_ID=2`
+  - `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=109282367`
+  - preview-host значения `SITE_DOMAIN`, `SITE_WWW_DOMAIN`, `PUBLIC_BASE_URL`
+- `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` пока оставлены пустыми;
+- выполнена сборка и запущены `postgres + app`;
+- через Timeweb DNS подняты:
+  - `gena.madcore-kavkaz.ru`
+  - `www.gena.madcore-kavkaz.ru`
+- через Certbot выпущен сертификат `gena.madcore-kavkaz.ru`;
+- общий `madcore_nginx` расширен под новый preview-host.
 
-Это значит, что финальный шаг создания server directory и выкладки в `/opt/madcore-gena` требует либо root-сессии, либо ручного выполнения от администратора сервера.
+## Что заполнять в `/opt/madcore-gena/.env`
 
-## Что нужно заполнить до выкладки
-
-- `.env` в `/opt/madcore-gena`
+- отдельные DB-пароли для нового контура;
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
-- `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=109282367` для текущего preview-контура
-- `MATOMO_SITE_ID`
-- финальный `SITE_DOMAIN` / `SITE_WWW_DOMAIN` / `SITE_CERT_NAME`
-- при необходимости `YANDEX_DIRECT_CLIENT_LOGIN`
+- `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=109282367`
+- `MATOMO_SITE_ID=2`
+- `SITE_DOMAIN=gena.madcore-kavkaz.ru`
+- `SITE_WWW_DOMAIN=www.gena.madcore-kavkaz.ru`
+- `PUBLIC_BASE_URL=https://gena.madcore-kavkaz.ru`
 
-## Безопасная выкладка
+## Текущие команды обслуживания
+
+Пересборка app после обновления кода:
+
+```bash
+ssh root@151.247.197.153
+cd /opt/madcore-gena
+docker compose build app
+docker compose up -d app
+```
+
+Проверка контейнеров:
+
+```bash
+ssh root@151.247.197.153
+cd /opt/madcore-gena
+docker compose ps
+docker logs --tail=100 madcore_gena_app
+docker logs --tail=100 madcore_gena_postgres
+```
+
+Проверка публичного preview:
 
 ```bash
 cd /home/max/MADCORE RF
-rsync -avz --delete \
-  --exclude '.git' \
-  --exclude 'node_modules' \
-  --exclude '.next' \
-  --exclude '.next-dev' \
-  --exclude '.data' \
-  --exclude '.tmp' \
-  --exclude '.env' \
-  --exclude '.env.*' \
-  --exclude 'certbot/' \
-  --exclude 'backups/' \
-  /home/max/MADCORE\ RF/ root@151.247.197.153:/opt/madcore-gena/
+./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru
+METRIKA_COUNTER_ID=109282367 ./scripts/production-adtech-smoke.sh https://gena.madcore-kavkaz.ru
 ```
 
-После загрузки:
+Проверка общего ingress:
 
 ```bash
-cd /opt/madcore-gena
-./scripts/server-db-backup.sh
-docker compose up -d --build postgres app nginx
-docker compose exec -T app npx prisma migrate deploy
-./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru
+ssh root@151.247.197.153
+docker exec madcore_nginx nginx -t
+docker exec madcore_nginx nginx -s reload
 ```
 
-## Edge proxy
+## Что осталось до финального домена
 
-Чтобы сделать новый домен публичным, на сервере нужен отдельный доменный маршрут до нового контура. Предпочтительный вариант:
-
-- до выбора финального домена можно использовать текущий preview-host;
-- после выбора домена основной входной proxy принимает уже финальный host;
-- дальше запросы уходят в новый контур `MADCORE Gena`;
-- основной сайт `madcore-kavkaz.ru` при этом остается без изменений по бизнес-логике.
-
-## Проверка после выкладки
-
-```bash
-cd /opt/madcore-gena
-docker compose ps
-docker compose logs --tail=100 app
-docker compose logs --tail=100 nginx
-./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru
-METRIKA_COUNTER_ID=<new_counter_id> ./scripts/production-adtech-smoke.sh https://gena.madcore-kavkaz.ru
-```
+1. Выбрать финальный домен проекта.
+2. Обновить `SITE_DOMAIN`, `SITE_WWW_DOMAIN` и `PUBLIC_BASE_URL` в `/opt/madcore-gena/.env`.
+3. Создать новые DNS-записи под финальный домен.
+4. Выпустить новый сертификат.
+5. Обновить host-routing в `/opt/madcore/nginx.conf`.
+6. При необходимости обновить host/URL в Метрике и Matomo.
+7. Заполнить токены отдельного Telegram-бота и перепроверить live lead notify.

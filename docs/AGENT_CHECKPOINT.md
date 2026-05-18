@@ -6,26 +6,25 @@
 
 - локальная самостоятельная копия проекта уже создана в `/home/max/MADCORE RF`;
 - проектный бренд переведен в `MADCORE Gena`;
-- серебряный UI-контур и новые контакты заведены в кодовую базу;
-- добавлен новый канал `MaX` в CTA и lead-flow;
-- подготовлены отдельные ключи client tracking:
-  - `madcore_gena_tracking`
-  - `madcore_gena_session_id`
-- подготовлены deployment defaults для отдельного контура `/opt/madcore-gena`;
-- подготовлены отдельные рекламные `cmp`-сегменты.
+- серебряный UI-контур, новые контакты и `MaX` заведены в кодовую базу;
+- tracking разведен на `madcore_gena_*`;
+- отдельный preview уже живет на `https://gena.madcore-kavkaz.ru`;
+- на сервере уже есть отдельная точка развёртывания `/opt/madcore-gena`;
+- в Метрике уже существует отдельный счетчик `109282367`;
+- в Matomo уже существует отдельный `site id = 2`;
+- TLS для `gena.madcore-kavkaz.ru` уже выпущен.
 
 ## Ключевые незавершенные задачи
 
-- GitHub-репозиторий `MaxCorpOrg/MADCORE-Gena-website`
-- отдельный Telegram-бот
-- отдельный счетчик Яндекс.Метрики и цели
-- отдельный Matomo `site id`
-- production deployment
-- DNS / SSL / proxy для нового поддомена
+- отдельный Telegram-бот;
+- заполнение `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` в `/opt/madcore-gena/.env`;
+- выбор финального домена;
+- финальный доменный cutover вместо preview-host;
+- при необходимости обновление доменных привязок Метрики и Matomo под финальный домен.
 
 ## Ограничения
 
 - исходный сайт `/home/max/MADCORE` не ломать;
-- не использовать старый production-домен `madcore-kavkaz.ru` как домен нового сайта;
+- не использовать старый production-домен `madcore-kavkaz.ru` как финальный домен нового сайта;
 - не переиспользовать старый номер телефона, старые `cmp` и старые client tracking keys;
 - не коммитить секреты.

@@ -4,12 +4,12 @@
 
 Целевой репозиторий: `git@github.com:MaxCorpOrg/MADCORE-Gena-website.git`
 
-Временный preview-адрес текущего этапа:
+Текущий публичный preview:
 
-- preview: `https://gena.madcore-kavkaz.ru`
-- `www`: `https://www.gena.madcore-kavkaz.ru`
+- `https://gena.madcore-kavkaz.ru`
+- `https://www.gena.madcore-kavkaz.ru`
 
-Это текущий адрес для проверки сайта. Финальный домен для `MADCORE Gena` будет другим и должен задаваться через окружение, а не считаться зафиксированным в проекте.
+Это адрес для проверки сайта на текущем этапе. Финальный домен для `MADCORE Gena` будет другим и должен задаваться через окружение и серверную конфигурацию.
 
 ## Кратко
 
@@ -19,11 +19,11 @@
 - серебряный визуальный стиль;
 - отдельные контакты;
 - отдельный lead-flow;
-- отдельные cookie/local storage ключи;
+- отдельные cookie и localStorage ключи;
 - отдельные UTM-сегменты;
 - отдельная точка развёртывания на сервере.
 
-Текущий основной сайт в `/home/max/MADCORE` при этом не должен ломаться и не является рабочей директорияй этого проекта.
+Текущий основной сайт в `/home/max/MADCORE` при этом не должен ломаться и не является рабочей директорией этого проекта.
 
 ## Стек
 
@@ -33,7 +33,7 @@
 - аналитика: Matomo + Яндекс.Метрика + собственные серверные события
 - server notify: Telegram bot
 
-## Что уже отделено
+## Что уже отделено и заведено
 
 - проект переименован в `MADCORE Gena`;
 - в runtime-конфиг вынесены новые контакты:
@@ -41,7 +41,7 @@
   - WhatsApp: `https://wa.me/79042440444`
   - MaX: `https://max.ru/u/f9LHodD0cOIXADxaRo9U9W_VHmDuRL5fMKsJO5O9YAs5rg0iZYqYmXKw0dw`
   - телефон: `+7-904-244-04-44`
-- client tracking переведен на отдельные ключи `madcore_gena_*`;
+- client tracking переведен на `madcore_gena_*`;
 - добавлен новый CTA-канал `MaX`;
 - подготовлены отдельные deployment defaults:
   - `/opt/madcore-gena`
@@ -53,17 +53,17 @@
   - `madcore_gena_whatsapp`
   - `madcore_gena_max`
   - `madcore_gena_tg_channels`
+- создан отдельный счетчик Яндекс.Метрики `109282367`;
+- создан отдельный Matomo сайт `site id = 2`;
+- preview-контур уже выложен на сервер и отвечает по HTTPS.
 
-## Что еще требуется до production
+## Что еще требуется до финального домена
 
-- удаленный GitHub-репозиторий уже создан и подключен: `MaxCorpOrg/MADCORE-Gena-website`;
-- создать отдельный счетчик Яндекс.Метрики и цели;
-- создать отдельный `site id` в Matomo;
 - создать отдельного Telegram-бота и заполнить `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`;
-- заполнить production `.env` для нового проекта;
-- развернуть проект в `/opt/madcore-gena`;
-- заменить временный preview-host на финальный домен и добавить под него доменный proxy-маршрут;
-- выполнить smoke-проверки.
+- выбрать финальный домен;
+- заменить временный preview-host на финальный домен;
+- при необходимости обновить доменные привязки Метрики и Matomo;
+- перепроверить финальный live lead notify после подключения нового бота.
 
 ## Команды
 
@@ -96,6 +96,7 @@ cp .env.preview.example .env
 - выкладка: `docs/DEPLOYMENT.md`
 - runbook: `docs/RUNBOOK.md`
 - Matomo: `docs/MATOMO_SETUP.md`
+- Метрика: `docs/YANDEX_METRIKA_SETUP.md`
 - UTM: `docs/UTM_YANDEX_DIRECT.md`
 - архитектура: `ARCHITECTURE.md`
 - следующие шаги: `NEXT_STEPS.md`
