@@ -1,6 +1,6 @@
 # MADCORE Gena Project Checkpoint
 
-Обновлено: `2026-05-18`
+Обновлено: `2026-05-19`
 
 ## Проект
 
@@ -16,7 +16,8 @@
 
 - новый проект полностью отделен от исходного сайта на уровне кода;
 - основной сайт `/home/max/MADCORE` и его production-маршрут оставлены рабочими;
-- silver-версия без гор развернута и публично доступна на preview-поддомене;
+- metallic-версия без гор развернута и публично доступна на preview-поддомене;
+- публичный текст preview синхронизирован с `madcore-kavkaz.ru`, при этом отдельные контакты, аналитика и lead-flow `Gena` сохранены;
 - на сервере создан отдельный runtime-контур:
   - `madcore_gena_postgres`
   - `madcore_gena_app`
@@ -32,12 +33,20 @@
   - preview-host по умолчанию
   - новые ссылки Telegram / WhatsApp / MaX
   - новый номер телефона
-  - отдельные тексты под `MADCORE Gena`
+  - публичный copy с основного `MADCORE-website`
 - `CtaButtons`, `LeadForm`, `lead-message`, `validation` и tracking обновлены под `MaX`;
 - server routes `/api/lead`, `/api/event`, `/go` переведены на `madcore_gena_tracking`;
 - `docker-compose.yml`, `nginx.conf` и server scripts разведены под `/opt/madcore-gena`;
 - preview-host вынесен в настраиваемые переменные окружения;
 - добавлен отдельный шаблон `.env.preview.example`;
+- `.env.example` и `.env.preview.example` обновлены под публичный `PRODUCT_NAME=MADCORE 2.0` и новый `PUBLIC_ADDRESS`;
+- через OpenAI Image2 сгенерированы и подключены:
+  - `public/images/hero-metallic-premium-v1.png`
+  - `public/images/product-metallic-card-v1.png`
+  - `public/images/background-metallic-brushed-v1.png`
+  - `public/images/favicon-metallic-loop-v1.png`
+- исходный gold-logo `madcore-logo-ai-gold-transparent.png` переведен в metallic wordmark через CSS без изменения формы букв;
+- `src/app/icon.png`, `src/app/apple-icon.png` и `src/app/favicon.ico` заменены на новый металлический favicon-набор;
 - helper `scripts/print-yandex-direct-campaign-links.sh` переведен на `madcore_gena_*`;
 - через API Яндекс.Метрики создан отдельный счетчик `109282367` и отдельные JS-цели проекта;
 - в Matomo создан отдельный сайт `MADCORE Gena preview` с `site id = 2`;
@@ -48,18 +57,27 @@
 - через `BotFather` создан отдельный бот `@MadcoreGenaLeadsBot`;
 - в `/opt/madcore-gena/.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
 - `madcore_gena_app` пересоздан на VPS с новым Telegram-конфигом.
+- `2026-05-19` live preview перевыкатан с новым metallic visual и source-copy;
+- на сервере обновлены live overrides:
+  - `PRODUCT_NAME=MADCORE 2.0`
+  - `PUBLIC_ADDRESS=Наш офис находится в Нальчике, на улице Тарчокова 50, в офисном здании, 2-ой этаж, офис 24.`
 
 ## Что проверено
 
 - `npm run lint` проходит;
 - `npm run build` проходит;
 - `bash ./scripts/repo-adtech-audit.sh` проходит;
-- локальный browser screenshot подтверждает серебряный first screen без гор;
+- локальные desktop/mobile screenshots подтверждают metallic first screen без гор;
 - `https://gena.madcore-kavkaz.ru/` отвечает `200`;
 - `https://gena.madcore-kavkaz.ru/api/health` отвечает `200`;
 - `https://www.gena.madcore-kavkaz.ru/` отдает `301` на apex preview-host;
 - `./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru` проходит;
 - `METRIKA_COUNTER_ID=109282367 ./scripts/production-adtech-smoke.sh https://gena.madcore-kavkaz.ru` проходит;
+- live desktop/mobile screenshots подтверждают, что новый логотип, hero, product-card и обновленный copy уже отдаются с preview-host;
+- live `curl` подтверждает отдачу:
+  - `/icon.png`
+  - `/apple-icon.png`
+  - `/favicon.ico`
 - live test `2026-05-18` через server-side `POST /api/lead` вернул `200` и создал `lead id = 1`;
 - уведомление о тестовой заявке пришло в `@MadcoreGenaLeadsBot`;
 - после server-side `app recreate` routing preview-host восстановлен и повторный production smoke снова прошел штатно;
@@ -76,3 +94,4 @@
 1. После выбора финального домена заменить preview-host в DNS, TLS, ingress и `.env`.
 2. При необходимости обновить привязки Метрики и Matomo под финальный домен.
 3. Если лиды должны приходить не в текущую личку `AK5`, запустить бота из нового чата и обновить `TELEGRAM_CHAT_ID`.
+4. Если нужен следующий маркетинговый шаг, на базе текущего metallic-pack сделать отдельные рекламные creatives и performance-баннеры.

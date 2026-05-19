@@ -1,6 +1,6 @@
 # MADCORE Gena Deployment
 
-Обновлено: `2026-05-18`
+Обновлено: `2026-05-19`
 
 ## Кратко
 
@@ -40,6 +40,10 @@
   - `MATOMO_SITE_ID=2`
   - `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=109282367`
   - preview-host значения `SITE_DOMAIN`, `SITE_WWW_DOMAIN`, `PUBLIC_BASE_URL`
+- `2026-05-19` в live `.env` обновлены публичные значения:
+  - `PRODUCT_NAME=MADCORE 2.0`
+  - `PUBLIC_ADDRESS=Наш офис находится в Нальчике, на улице Тарчокова 50, в офисном здании, 2-ой этаж, офис 24.`
+- `2026-05-19` на preview выкачен новый metallic visual pack и source-copy с `madcore-kavkaz.ru` без изменения отдельных `Gena`-контактов и аналитики;
 - через `BotFather` создан отдельный бот `@MadcoreGenaLeadsBot`;
 - в `.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
 - выполнена сборка и запущены `postgres + app`;
@@ -52,6 +56,10 @@
 - live test `2026-05-18` подтвердил:
   - `POST http://127.0.0.1:3001/api/lead` возвращает `200`;
   - notify о заявке приходит в `@MadcoreGenaLeadsBot`.
+- `2026-05-19` после обновления frontend-визуала повторно подтверждены:
+  - `./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru`
+  - `METRIKA_COUNTER_ID=109282367 ./scripts/production-adtech-smoke.sh https://gena.madcore-kavkaz.ru`
+  - live desktop/mobile screenshots с preview-host
 
 ## Что заполнять в `/opt/madcore-gena/.env`
 

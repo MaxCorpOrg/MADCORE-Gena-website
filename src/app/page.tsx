@@ -97,7 +97,7 @@ export default function HomePage() {
                 <div className="product-glow" aria-hidden="true" />
                 <Image
                   src={siteContent.heroImagePath}
-                  alt="Серебряная фирменная иллюстрация MADCORE Gena"
+                  alt="Премиальная металлическая иллюстрация продукта MADCORE 2.0"
                   width={1100}
                   height={1400}
                   priority
@@ -161,10 +161,11 @@ export default function HomePage() {
                 </div>
                 <div className="product-media-frame relative overflow-hidden rounded-2xl border border-[#2A2A2A] bg-[#0c0c0c]">
                   <Image
-                    src="/images/product-gena-silver-v1.svg"
-                    alt="Серебряная фирменная карточка MADCORE Gena"
+                    src="/images/product-metallic-card-v1.png"
+                    alt="Премиальная металлическая карточка продукта MADCORE 2.0"
                     width={1254}
                     height={1254}
+                    loading="eager"
                     className="product-card-image"
                   />
                 </div>
