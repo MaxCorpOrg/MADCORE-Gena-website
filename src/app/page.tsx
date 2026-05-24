@@ -16,15 +16,20 @@ export const metadata: Metadata = {
 export default function HomePage() {
   const {
     telegramUrl,
+    telegramChatUrl,
     whatsappUrl,
     maxUrl,
+    maxChatUrl,
     callUrl,
     publicPhone,
     publicAddress,
     productName,
     publicPrice,
-    siteDomain,
+    displayDomain,
   } = getSiteRuntimeConfig();
+  const showOfficeBlock = Boolean(
+    siteContent.officeTitle.trim() && siteContent.officeAddress.trim() && publicAddress.trim(),
+  );
 
   return (
     <main className="page-shell">
@@ -80,8 +85,10 @@ export default function HomePage() {
                 <div className="hero-actions">
                   <CtaButtons
                     telegramUrl={telegramUrl}
+                    telegramChatUrl={telegramChatUrl}
                     whatsappUrl={whatsappUrl}
                     maxUrl={maxUrl}
+                    maxChatUrl={maxChatUrl}
                     callUrl={callUrl}
                     callPhone={publicPhone}
                   />
@@ -92,7 +99,7 @@ export default function HomePage() {
             <div className="hero-visual">
               <div className="card hero-visual-frame">
                 <div className="hero-visual-chip" aria-hidden="true">
-                  {siteDomain}
+                  {displayDomain}
                 </div>
                 <div className="product-glow" aria-hidden="true" />
                 <Image
@@ -108,7 +115,10 @@ export default function HomePage() {
           </div>
 
           <div className="card hero-official-band">
-            <p className="section-copy hero-official-text">{siteContent.officialBandText}</p>
+            <p className="section-copy hero-official-text">
+              <span className="hero-official-copy">{siteContent.officialBandText}</span>
+              <span className="hero-official-product">{productName}</span>
+            </p>
           </div>
 
           <div className="card hero-consultation-band" data-track-section="offer">
@@ -128,11 +138,15 @@ export default function HomePage() {
       </section>
 
       <section className="container section-space section-space--story section-space--first">
-        <div className="story-shell">
-          <h2 className="section-title">{siteContent.officeTitle}</h2>
-          <div className="card story-card p-5 sm:p-7">
-            <p className="section-copy">{publicAddress}</p>
-          </div>
+        <div className={`story-shell ${showOfficeBlock ? "" : "story-shell--steps-only"}`}>
+          {showOfficeBlock ? (
+            <>
+              <h2 className="section-title">{siteContent.officeTitle}</h2>
+              <div className="card story-card p-5 sm:p-7">
+                <p className="section-copy">{publicAddress}</p>
+              </div>
+            </>
+          ) : null}
           <div className="story-steps-block">
             <h2 className="section-title">{siteContent.stepsTitle}</h2>
             <ol className="story-steps-grid">
@@ -161,7 +175,7 @@ export default function HomePage() {
                 </div>
                 <div className="product-media-frame relative overflow-hidden rounded-2xl border border-[#2A2A2A] bg-[#0c0c0c]">
                   <Image
-                    src="/images/product-metallic-card-v1.png"
+                    src="/images/product-metallic-card-v2.png"
                     alt="Премиальная металлическая карточка продукта MADCORE 2.0"
                     width={1254}
                     height={1254}

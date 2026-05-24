@@ -11,7 +11,6 @@ const METRIKA_GOAL_NAMES = new Set([
   "whatsapp_click",
   "max_click",
   "call_click",
-  "consultation_click",
   "form_start",
   "form_submit",
   "lead",

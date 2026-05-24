@@ -1,13 +1,15 @@
 # MADCORE Gena Project Checkpoint
 
-Обновлено: `2026-05-19`
+Обновлено: `2026-05-24` `chat CTA live deploy`
 
 ## Проект
 
 - название: `MADCORE Gena`
 - локальный путь: `/home/max/MADCORE RF`
 - remote: `git@github.com:MaxCorpOrg/MADCORE-Gena-website.git`
-- текущий live preview: `https://gena.madcore-kavkaz.ru`
+- production: `https://madcore.site`
+- legacy preview: `https://gena.madcore-kavkaz.ru`
+- выбранный целевой домен: `madcore.site`
 - server directory: `/opt/madcore-gena`
 - `MATOMO_SITE_ID`: `2`
 - `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID`: `109282367`
@@ -16,15 +18,24 @@
 
 - новый проект полностью отделен от исходного сайта на уровне кода;
 - основной сайт `/home/max/MADCORE` и его production-маршрут оставлены рабочими;
-- metallic-версия без гор развернута и публично доступна на preview-поддомене;
+- metallic-версия без гор развернута и публично доступна на production-домене `madcore.site`;
+- дополнительный visual polish `round 3` уже выкачен на preview-host;
 - публичный текст preview синхронизирован с `madcore-kavkaz.ru`, при этом отдельные контакты, аналитика и lead-flow `Gena` сохранены;
+- hero-chip показывает `madcore.site`, и реальный production-routing уже переведен на `madcore.site`;
 - на сервере создан отдельный runtime-контур:
   - `madcore_gena_postgres`
   - `madcore_gena_app`
 - новый app-контейнер живет в `/opt/madcore-gena` и доступен через общий ingress основного сервера;
 - подключение `madcore_gena_app` к внешней сети `madcore_default` с alias `genaapp` теперь закреплено прямо в `docker-compose.yml`;
 - отдельный Telegram bot-flow уже работает через `@MadcoreGenaLeadsBot`;
-- проектный `madcore_gena_nginx` в коде остается подготовленным, но в текущем live preview TLS и host-routing обслуживаются общим `madcore_nginx`.
+- Telegram bot-flow отправляет уведомления в основной `TELEGRAM_CHAT_ID` и дополнительный список `TELEGRAM_EXTRA_CHAT_IDS`;
+- новый hero CTA-вариант уже выкачен на production `https://madcore.site`:
+  - вместо широкой кнопки `Получить консультацию` теперь используются две отдельные chat-кнопки;
+  - мобильный порядок: `WhatsApp -> Telegram -> MaX -> чат Telegram -> чат Max -> звонок`;
+  - десктопный нижний ряд состоит из двух малых chat-кнопок;
+- перед live-заменой CTA-файлов на сервере создана резервная копия:
+  - `/opt/madcore-gena/.backup/20260524-122052`;
+- проектный `madcore_gena_nginx` в коде остается подготовленным, но в текущем production TLS и host-routing обслуживаются общим `madcore_nginx`.
 
 ## Сделано
 
@@ -45,8 +56,24 @@
   - `public/images/product-metallic-card-v1.png`
   - `public/images/background-metallic-brushed-v1.png`
   - `public/images/favicon-metallic-loop-v1.png`
+- `round 2` через OpenAI Image2 дополнительно сгенерированы и подключены:
+  - `public/images/product-metallic-card-v2.png`
+  - `public/images/favicon-metallic-round-v1.png`
+- `round 3` через OpenAI Image2 дополнительно сгенерированы и подключены:
+  - `public/images/madcore-logo-metallic-v3.png`
+  - `public/images/background-metallic-mobile-v1.png`
 - исходный gold-logo `madcore-logo-ai-gold-transparent.png` переведен в metallic wordmark через CSS без изменения формы букв;
+- отдельный точный metallic-wordmark сохранен как:
+  - `public/images/madcore-logo-metallic-v2.png`
+- hero-wordmark дополнительно переведен на более холодный chrome-metallic asset:
+  - `public/images/madcore-logo-metallic-v3.png`
+- у WhatsApp CTA усилен контраст текста без изменения layout и размеров кнопки;
+- для мобильного first screen подключен отдельный background без яркой правой полосы:
+  - `public/images/background-metallic-mobile-v1.png`
 - `src/app/icon.png`, `src/app/apple-icon.png` и `src/app/favicon.ico` заменены на новый металлический favicon-набор;
+- из story-frame убран блок `Наш адрес`, оставлен только блок `Как сделать заказ`;
+- official band под hero переведен на акцентное:
+  - `Мы являемся официальным представителем MADCORE 2.0`
 - helper `scripts/print-yandex-direct-campaign-links.sh` переведен на `madcore_gena_*`;
 - через API Яндекс.Метрики создан отдельный счетчик `109282367` и отдельные JS-цели проекта;
 - в Matomo создан отдельный сайт `MADCORE Gena preview` с `site id = 2`;
@@ -54,13 +81,39 @@
 - выпущен Let's Encrypt сертификат для preview-host и `www`, действующий до `2026-08-16`;
 - на сервере развернут preview-контур в `/opt/madcore-gena`;
 - общий ingress сервера проксирует preview-host на `genaapp:3000`.
+- общий ingress сервера проксирует production-host `madcore.site` на `genaapp:3000`, а `www.madcore.site` редиректит на apex.
 - через `BotFather` создан отдельный бот `@MadcoreGenaLeadsBot`;
 - в `/opt/madcore-gena/.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
+- `2026-05-23` добавлен дополнительный получатель заявок `@M_a_x_i_m_M_i_k_h_a_i_l_o_v` через `TELEGRAM_EXTRA_CHAT_IDS`;
+- `src/lib/telegram.ts` обновлен для отправки заявок нескольким Telegram-получателям;
+- `2026-05-23` исправлен dropdown поля `Предпочтительный способ связи`: нативные options теперь отдаются с темным фоном и светлым текстом;
+- `2026-05-23` все CTA-кнопки унифицированы под один metallic silver стиль с одинаковым жирным шрифтом;
+- `2026-05-24` в `src/config/site.ts` добавлены отдельные runtime ссылки:
+  - `TELEGRAM_CHAT_URL=https://t.me/MadCoreChat`
+  - `MAX_CHAT_URL=https://max.ru/join/gkeLUFOdvn5QYSNerv59YDPCxDSK388EPyAb7zxc6cw`
+- `2026-05-24` `CtaButtons` и hero CTA-grid обновлены под две новые chat-кнопки вместо широкой hero-кнопки консультации;
+- `.env.example` и `.env.preview.example` расширены новыми переменными `TELEGRAM_CHAT_URL` и `MAX_CHAT_URL`;
+- `2026-05-24` на сервер точечно выкачены только файлы hero CTA:
+  - `src/components/CtaButtons.tsx`
+  - `src/config/site.ts`
+  - `src/app/page.tsx`
+  - `src/app/thanks/page.tsx`
+  - `src/app/globals.css`
+- `2026-05-24` `madcore_gena_app` пересобран через `docker compose build app` и пересоздан через `docker compose up -d app`;
 - `madcore_gena_app` пересоздан на VPS с новым Telegram-конфигом.
 - `2026-05-19` live preview перевыкатан с новым metallic visual и source-copy;
 - на сервере обновлены live overrides:
   - `PRODUCT_NAME=MADCORE 2.0`
   - `PUBLIC_ADDRESS=Наш офис находится в Нальчике, на улице Тарчокова 50, в офисном здании, 2-ой этаж, офис 24.`
+- в live `.env` добавлен:
+  - `SITE_DISPLAY_DOMAIN=madcore.site`
+- `2026-05-23` в live `.env` финально выставлены:
+  - `SITE_DOMAIN=madcore.site`
+  - `SITE_DISPLAY_DOMAIN=madcore.site`
+  - `SITE_WWW_DOMAIN=www.madcore.site`
+  - `SITE_CERT_NAME=madcore.site`
+  - `PUBLIC_BASE_URL=https://madcore.site`
+- `Dockerfile` и `docker-compose.yml` дополнены build args доменных переменных, чтобы статические metadata Next.js собирались с финальным доменом.
 
 ## Что проверено
 
@@ -68,6 +121,27 @@
 - `npm run build` проходит;
 - `bash ./scripts/repo-adtech-audit.sh` проходит;
 - локальные desktop/mobile screenshots подтверждают metallic first screen без гор;
+- локальный `round 3` screenshot-check подтверждает:
+  - более металлический chrome-wordmark
+  - более читаемую WhatsApp-кнопку
+  - mobile background без яркой правой полосы
+- `2026-05-20` server deploy `round 3` подтвержден:
+  - snapshot sync в `/opt/madcore-gena`
+  - `docker compose build app`
+  - `docker compose up -d app`
+  - live HTML с `madcore-logo-metallic-v3.png`
+  - live desktop/mobile screenshots
+- `https://gena.madcore-kavkaz.ru/` отвечает `200`;
+- `2026-05-23` domain cutover подтвержден:
+  - DNS `madcore.site` и `www.madcore.site` указывают на `151.247.197.153`;
+  - Let's Encrypt сертификат для `madcore.site` и `www.madcore.site` выпущен до `2026-08-21`;
+  - `https://madcore.site/` отвечает `200`;
+  - `https://www.madcore.site/` отдает `301` на `https://madcore.site/`;
+  - `https://madcore.site/api/health` отвечает `200`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - `robots.txt`, `sitemap.xml`, `og:image` и `twitter:image` используют `https://madcore.site`;
+  - `https://gena.madcore-kavkaz.ru/` и `https://madcore-kavkaz.ru/` продолжают отвечать `200`;
 - `https://gena.madcore-kavkaz.ru/` отвечает `200`;
 - `https://gena.madcore-kavkaz.ru/api/health` отвечает `200`;
 - `https://www.gena.madcore-kavkaz.ru/` отдает `301` на apex preview-host;
@@ -78,20 +152,44 @@
   - `/icon.png`
   - `/apple-icon.png`
   - `/favicon.ico`
+- live HTML подтверждает:
+  - `madcore.site` в hero-chip
+  - отсутствие `Наш адрес`
+  - отсутствие строки `Тарчокова 50`
 - live test `2026-05-18` через server-side `POST /api/lead` вернул `200` и создал `lead id = 1`;
 - уведомление о тестовой заявке пришло в `@MadcoreGenaLeadsBot`;
+- live test `2026-05-23` после добавления второго получателя создал `lead id = 4`, а лог notify вернул `ok: true`;
+- после CSS-правки dropdown `2026-05-23` live CSS содержит правила `select.field option`, а production smoke на `https://madcore.site` проходит;
+- после унификации metallic CTA `2026-05-23` live CSS содержит общий metallic стиль для всех CTA-классов, а production smoke на `https://madcore.site` проходит;
+- локально для `2026-05-24 chat CTA split` подтверждены:
+  - `npm run lint`
+  - `npm run build`
+- после live deploy `2026-05-24 chat CTA split` подтверждены:
+  - `madcore_gena_app` после пересборки имеет статус `healthy`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - live HTML `https://madcore.site` уже отдает:
+    - `Перейти в чат Telegram`
+    - `Перейти в чат Max`
+  - `https://madcore.site/api/health` отвечает `200`;
+  - `https://gena.madcore-kavkaz.ru/api/health` отвечает `200`;
+  - `https://madcore-kavkaz.ru` по-прежнему отдает отдельный счетчик `109236645`;
+  - `https://madcore.site` отдает отдельный счетчик `109282367`;
+- текущее ограничение legacy preview после live deploy:
+  - `https://gena.madcore-kavkaz.ru` остается доступен по `/`, `/privacy`, `/thanks` и `/api/health`;
+  - но `https://gena.madcore-kavkaz.ru/go?...` сейчас редиректит на `https://madcore.site/safe`;
+  - из-за этого полный `./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru` теперь не проходит проверку redirect host;
 - после server-side `app recreate` routing preview-host восстановлен и повторный production smoke снова прошел штатно;
 - дополнительный post-fix test lead после обновленного `docker-compose.yml` создал `lead id = 2`, и notify снова дошел в `@MadcoreGenaLeadsBot`;
 - основной production `https://madcore-kavkaz.ru` после добавления preview-маршрутов отвечает штатно.
 
 ## Не завершено
 
-- финальный live-домен не выбран;
-- финальный доменный cutover не выполнен.
+- при необходимости нужно обновить host/URL в Метрике и Matomo под финальный домен `madcore.site`.
+- если legacy preview должен оставаться полностью самостоятельным, нужно отдельно вернуть ему собственный `/go`-redirect без ухода на `madcore.site`.
 
 ## Что делать дальше
 
-1. После выбора финального домена заменить preview-host в DNS, TLS, ingress и `.env`.
-2. При необходимости обновить привязки Метрики и Matomo под финальный домен.
+1. При необходимости обновить привязки Метрики и Matomo под финальный домен.
+2. Если legacy preview должен оставаться полноценным запасным контуром, вернуть ему собственный `/go`-redirect без ухода на `madcore.site`.
 3. Если лиды должны приходить не в текущую личку `AK5`, запустить бота из нового чата и обновить `TELEGRAM_CHAT_ID`.
-4. Если нужен следующий маркетинговый шаг, на базе текущего metallic-pack сделать отдельные рекламные creatives и performance-баннеры.

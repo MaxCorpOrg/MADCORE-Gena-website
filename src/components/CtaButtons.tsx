@@ -1,25 +1,31 @@
 "use client";
 
-import Link from "next/link";
 import { sendEvent } from "@/lib/client-tracking";
 
 type CtaButtonsProps = {
   telegramUrl: string;
   whatsappUrl: string;
   maxUrl: string;
+  telegramChatUrl?: string;
+  maxChatUrl?: string;
   callUrl: string;
   callPhone: string;
-  withConsultation?: boolean;
+  withChatLinks?: boolean;
 };
 
 export default function CtaButtons({
   telegramUrl,
   whatsappUrl,
   maxUrl,
+  telegramChatUrl,
+  maxChatUrl,
   callUrl,
   callPhone,
-  withConsultation = true,
+  withChatLinks = true,
 }: CtaButtonsProps) {
+  const telegramChatHref = telegramChatUrl || telegramUrl;
+  const maxChatHref = maxChatUrl || maxUrl;
+
   const onTelegram = () => {
     void sendEvent("telegram_click", { target: "telegram" });
   };
@@ -32,8 +38,12 @@ export default function CtaButtons({
     void sendEvent("max_click", { target: "max" });
   };
 
-  const onConsultation = () => {
-    void sendEvent("consultation_click", { target: "consultation" });
+  const onTelegramChat = () => {
+    void sendEvent("telegram_click", { target: "telegram_chat" });
+  };
+
+  const onMaxChat = () => {
+    void sendEvent("max_click", { target: "max_chat" });
   };
 
   const onCall = () => {
@@ -41,7 +51,7 @@ export default function CtaButtons({
   };
 
   return (
-    <div className={`cta-grid ${withConsultation ? "cta-grid--with-consultation" : "cta-grid--compact"}`}>
+    <div className={`cta-grid ${withChatLinks ? "cta-grid--with-chat-links" : "cta-grid--compact"}`}>
       <a
         href={whatsappUrl}
         target="_blank"
@@ -81,23 +91,42 @@ export default function CtaButtons({
         </span>
       </a>
 
+      {withChatLinks ? (
+        <>
+          <a
+            href={telegramChatHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onTelegramChat}
+            className="btn btn-secondary cta-telegram-chat"
+          >
+            <span className="btn-stack">
+              <span className="btn-kicker">Открытый чат</span>
+              <span className="btn-title">Перейти в чат Telegram</span>
+            </span>
+          </a>
+
+          <a
+            href={maxChatHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onMaxChat}
+            className="btn btn-max cta-max-chat"
+          >
+            <span className="btn-stack">
+              <span className="btn-kicker">Открытый чат</span>
+              <span className="btn-title">Перейти в чат Max</span>
+            </span>
+          </a>
+        </>
+      ) : null}
+
       <a href={callUrl} onClick={onCall} className="btn btn-call cta-call">
         <span className="btn-stack">
           <span className="btn-kicker">Позвонить</span>
           <span className="btn-title">{callPhone}</span>
         </span>
       </a>
-
-      {withConsultation ? (
-        <Link href="#consultation" onClick={onConsultation} className="btn btn-outline cta-consultation">
-          <span className="btn-stack">
-            <span className="btn-kicker">По формату и наличию</span>
-            <span className="btn-title">Получить консультацию</span>
-          </span>
-        </Link>
-      ) : (
-        <span className="hidden sm:block" aria-hidden="true" />
-      )}
     </div>
   );
 }

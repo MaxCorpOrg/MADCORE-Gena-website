@@ -310,10 +310,10 @@ a {
   inset: 22% 8% 20%;
   border-radius: 999px;
   background:
-    radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 56%),
-    radial-gradient(circle, rgba(212, 223, 237, 0.26), transparent 62%);
-  filter: blur(28px);
-  opacity: 0.82;
+    radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent 56%),
+    radial-gradient(circle, rgba(182, 194, 208, 0.12), transparent 62%);
+  filter: blur(22px);
+  opacity: 0.3;
   animation: logo-aura 6s ease-in-out infinite;
 }
 
@@ -322,9 +322,9 @@ a {
   position: absolute;
   inset: 28% 12% 26%;
   border-radius: 999px;
-  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.28) 44%, transparent 100%);
-  filter: blur(16px);
-  opacity: 0.42;
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.18) 44%, transparent 100%);
+  filter: blur(12px);
+  opacity: 0.14;
   transform: translateX(-48%);
   animation: logo-sheen 8.5s linear infinite;
   pointer-events: none;
@@ -334,11 +334,10 @@ a {
   position: relative;
   z-index: 2;
   width: 100%;
-  aspect-ratio: 1940 / 376;
+  aspect-ratio: 2079 / 384;
   filter:
-    drop-shadow(0 0 12px rgba(244, 248, 255, 0.16))
-    drop-shadow(0 0 30px rgba(198, 211, 227, 0.22))
-    drop-shadow(0 16px 24px rgba(0, 0, 0, 0.24));
+    drop-shadow(0 0 16px rgba(220, 229, 239, 0.1))
+    drop-shadow(0 16px 24px rgba(0, 0, 0, 0.26));
   animation: wordmark-float 5.2s ease-in-out infinite;
 }
 
@@ -347,12 +346,7 @@ a {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter:
-    grayscale(1)
-    saturate(0)
-    brightness(1.62)
-    contrast(1.1)
-    drop-shadow(0 0 1.1rem rgba(243, 247, 252, 0.2));
+  filter: contrast(1.08) saturate(0.9) brightness(1.04);
   animation: wordmark-pulse 6.2s ease-in-out infinite;
 }
 
@@ -474,6 +468,14 @@ a {
   overflow: hidden;
   isolation: isolate;
   font-family: var(--font-manrope), system-ui, sans-serif;
+  font-weight: 820;
+  color: #223040;
+  background:
+    linear-gradient(135deg, #f4f8fc 0%, #d5dee8 28%, #a8b7c9 58%, #74879e 100%);
+  box-shadow:
+    0 20px 34px rgba(122, 139, 163, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -18px 30px rgba(41, 55, 74, 0.16);
   transition:
     transform var(--motion-fast) var(--ease-premium),
     box-shadow var(--motion-medium) var(--ease-premium),
@@ -485,8 +487,10 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 54%);
-  opacity: 0.65;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.06) 48%, transparent 62%),
+    radial-gradient(circle at 22% 0%, rgba(255, 255, 255, 0.46), transparent 28%);
+  opacity: 0.9;
   pointer-events: none;
 }
 
@@ -541,81 +545,40 @@ a {
 
 .btn-title {
   font-size: 0.98rem;
-  font-weight: 760;
+  font-weight: 840;
   line-height: 1.22;
 }
 
-.btn-primary {
-  color: #f7fbff;
+.btn-primary,
+.btn-secondary,
+.btn-outline,
+.btn-call,
+.btn-max {
+  color: #223040;
+  border-color: rgba(237, 244, 251, 0.44);
   background:
-    linear-gradient(135deg, #f0f5fb 0%, #c2cfde 42%, #7a8ba3 100%);
+    linear-gradient(135deg, #f4f8fc 0%, #d5dee8 28%, #a8b7c9 58%, #74879e 100%);
   box-shadow:
     0 20px 34px rgba(122, 139, 163, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -18px 30px rgba(41, 55, 74, 0.16);
 }
 
-.btn-primary .btn-kicker {
-  color: rgba(247, 251, 255, 0.76);
-}
-
-.btn-secondary {
-  color: var(--text-strong);
-  border-color: rgba(185, 198, 218, 0.28);
-  background:
-    linear-gradient(135deg, rgba(22, 28, 36, 0.96), rgba(11, 15, 22, 0.94)),
-    radial-gradient(circle at top center, rgba(216, 226, 238, 0.1), transparent 48%);
-  box-shadow:
-    0 14px 26px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-
-.btn-secondary .btn-kicker {
-  color: var(--gold-soft);
-}
-
-.btn-outline {
-  color: var(--gold-soft);
-  border-color: rgba(185, 198, 218, 0.34);
-  background:
-    linear-gradient(135deg, rgba(26, 35, 48, 0.78), rgba(11, 16, 23, 0.94)),
-    radial-gradient(circle at top center, rgba(220, 229, 240, 0.12), transparent 44%);
-  box-shadow:
-    0 14px 26px rgba(8, 13, 20, 0.26),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-.btn-outline .btn-kicker {
-  color: rgba(233, 240, 247, 0.74);
-}
-
-.btn-call {
-  color: #f7fbff;
-  border-color: rgba(185, 198, 218, 0.32);
-  background:
-    linear-gradient(135deg, rgba(43, 54, 68, 0.96), rgba(14, 19, 26, 0.94)),
-    radial-gradient(circle at top center, rgba(191, 204, 220, 0.16), transparent 46%);
-  box-shadow:
-    0 14px 28px rgba(16, 20, 27, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
-}
-
-.btn-call .btn-kicker {
-  color: rgba(228, 237, 247, 0.78);
-}
-
-.btn-max {
-  color: #f8fbff;
-  border-color: rgba(193, 207, 228, 0.36);
-  background:
-    linear-gradient(135deg, rgba(34, 44, 58, 0.96), rgba(12, 17, 24, 0.94)),
-    radial-gradient(circle at top center, rgba(214, 225, 240, 0.16), transparent 46%);
-  box-shadow:
-    0 14px 28px rgba(14, 18, 25, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.07);
-}
-
+.btn-primary .btn-kicker,
+.btn-secondary .btn-kicker,
+.btn-outline .btn-kicker,
+.btn-call .btn-kicker,
 .btn-max .btn-kicker {
-  color: rgba(237, 243, 251, 0.78);
+  color: rgba(34, 48, 64, 0.62);
+}
+
+.btn-primary .btn-title,
+.btn-secondary .btn-title,
+.btn-outline .btn-title,
+.btn-call .btn-title,
+.btn-max .btn-title {
+  color: #223040;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .hero-visual {
@@ -759,6 +722,11 @@ a {
 }
 
 .hero-official-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem 0.62rem;
   max-width: 50rem;
   margin: 0;
   font-size: clamp(1.02rem, 1.55vw, 1.24rem);
@@ -766,6 +734,19 @@ a {
   font-weight: 580;
   color: var(--text);
   text-wrap: balance;
+}
+
+.hero-official-copy {
+  color: var(--text);
+}
+
+.hero-official-product {
+  display: inline-block;
+  color: var(--gold-soft);
+  font-size: clamp(1.2rem, 2vw, 1.52rem);
+  font-weight: 820;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .section-space--story {
@@ -798,6 +779,10 @@ a {
 .story-shell > * {
   position: relative;
   z-index: 1;
+}
+
+.story-shell--steps-only {
+  gap: 0.88rem;
 }
 
 .story-card {
@@ -1056,6 +1041,23 @@ a {
   color: rgba(176, 188, 204, 0.72);
 }
 
+select.field {
+  color-scheme: dark;
+  background-color: #0b0d10;
+  color: var(--text-strong);
+}
+
+select.field option {
+  background-color: #0b0d10;
+  color: var(--text-strong);
+}
+
+select.field option:checked,
+select.field option:hover {
+  background-color: #253244;
+  color: #ffffff;
+}
+
 .field:hover {
   border-color: rgba(214, 225, 239, 0.24);
 }
@@ -1204,18 +1206,14 @@ a {
   0%,
   100% {
     filter:
-      grayscale(1)
-      saturate(0)
-      contrast(1.08)
-      brightness(1.56);
+      contrast(1.01)
+      saturate(0.92);
   }
 
   50% {
     filter:
-      grayscale(1)
-      saturate(0)
-      contrast(1.12)
-      brightness(1.66);
+      contrast(1.04)
+      saturate(0.96);
   }
 }
 
@@ -1292,16 +1290,20 @@ a {
     grid-area: call;
   }
 
-  .cta-consultation {
-    grid-area: consultation;
+  .cta-telegram-chat {
+    grid-area: telegram-chat;
   }
 
-  .cta-grid--with-consultation {
+  .cta-max-chat {
+    grid-area: max-chat;
+  }
+
+  .cta-grid--with-chat-links {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas:
       "whatsapp telegram"
       "max call"
-      "consultation consultation";
+      "telegram-chat max-chat";
   }
 
   .cta-grid--compact {
@@ -1429,6 +1431,13 @@ a {
 }
 
 @media (max-width: 639px) {
+  body::before {
+    background:
+      linear-gradient(180deg, rgba(3, 4, 6, 0.18) 0%, rgba(3, 4, 6, 0.68) 100%),
+      url("/images/background-metallic-mobile-v1.png") center center / cover no-repeat;
+    opacity: 0.46;
+  }
+
   .container {
     width: min(100vw - 1rem, 100%);
   }
@@ -1474,6 +1483,12 @@ a {
   .story-shell,
   .hero-consultation-band {
     padding: 1rem;
+  }
+
+  .story-shell {
+    background:
+      linear-gradient(180deg, rgba(10, 13, 18, 0.8), rgba(9, 11, 16, 0.92)),
+      url("/images/background-metallic-mobile-v1.png") center center / cover no-repeat;
   }
 
   .story-step-card {

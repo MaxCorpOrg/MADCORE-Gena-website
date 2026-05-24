@@ -26,19 +26,27 @@ cp .env.preview.example .env
 ## Smoke-проверки
 
 ```bash
-./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru
-METRIKA_COUNTER_ID=<new_counter_id> ./scripts/production-adtech-smoke.sh https://gena.madcore-kavkaz.ru
+SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site
+METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site
 ```
 
 Если новый счетчик Яндекс.Метрики еще не создан, `production-adtech-smoke.sh` допускает запуск без `METRIKA_COUNTER_ID` и пропускает live-проверку presence-кода.
 
-Для финального домена эти же сценарии нужно запускать либо с первым аргументом, либо через обновленный `PUBLIC_BASE_URL` в `.env`.
+Для legacy preview используйте отдельные проверки с оговоркой:
+
+```bash
+curl -Iks https://gena.madcore-kavkaz.ru
+curl -Iks https://www.gena.madcore-kavkaz.ru
+curl -Iks https://gena.madcore-kavkaz.ru/api/health
+```
+
+Важно: `https://gena.madcore-kavkaz.ru/go?...` сейчас редиректит на `https://madcore.site/safe`, поэтому полный preview smoke больше не является эталонной проверкой самостоятельного host redirect.
 
 ## Что проверять после развертывания
 
-1. `https://gena.madcore-kavkaz.ru` отвечает по HTTPS.
-2. `https://www.gena.madcore-kavkaz.ru` редиректит на основной поддомен.
-3. Кнопки `Telegram`, `WhatsApp`, `MaX`, `Позвонить` и `Получить консультацию` работают.
+1. `https://madcore.site` отвечает по HTTPS.
+2. `https://www.madcore.site` редиректит на apex-домен.
+3. Кнопки `Telegram`, `WhatsApp`, `MaX`, `Перейти в чат Telegram`, `Перейти в чат Max` и `Позвонить` работают.
 4. `/go` сохраняет `yclid`, `click_id`, `decision_in`, `score_in_bucket`.
 5. `/safe` отдается с `noindex`.
 6. `/admin/leads` и `/api/admin/*` защищены basic auth.
@@ -51,5 +59,5 @@ METRIKA_COUNTER_ID=<new_counter_id> ./scripts/production-adtech-smoke.sh https:/
 - `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID`
 - `YANDEX_METRIKA_TOKEN`, если нужен API-доступ
 - `YANDEX_DIRECT_TOKEN`
-- `PUBLIC_BASE_URL=https://gena.madcore-kavkaz.ru` на этапе preview
+- `PUBLIC_BASE_URL=https://madcore.site` для production
 - `SITE_DOMAIN`, `SITE_WWW_DOMAIN`, `SITE_CERT_NAME` под текущий host

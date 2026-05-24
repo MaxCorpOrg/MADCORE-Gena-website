@@ -63,7 +63,8 @@ check_match "src/components/CtaButtons.tsx" 'sendEvent\("telegram_click"' 'CTA �
 check_match "src/components/CtaButtons.tsx" 'sendEvent\("whatsapp_click"' 'CTA отправляет whatsapp_click'
 check_match "src/components/CtaButtons.tsx" 'sendEvent\("max_click"' 'CTA отправляет max_click'
 check_match "src/components/CtaButtons.tsx" 'sendEvent\("call_click"' 'CTA отправляет call_click'
-check_match "src/components/CtaButtons.tsx" 'sendEvent\("consultation_click"' 'CTA отправляет consultation_click'
+check_match "src/components/CtaButtons.tsx" 'telegram_chat' 'CTA поддерживает отдельный Telegram chat target'
+check_match "src/components/CtaButtons.tsx" 'max_chat' 'CTA поддерживает отдельный Max chat target'
 
 check_match "src/components/LeadForm.tsx" 'sendEvent\("form_start"' 'Форма отправляет form_start'
 check_match "src/components/LeadForm.tsx" 'trackExternalAnalyticsGoal\("form_submit"' 'Форма отправляет form_submit в клиентскую аналитику'

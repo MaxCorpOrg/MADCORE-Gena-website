@@ -3,6 +3,7 @@ const PREVIEW_SITE_DOMAIN = "gena.madcore-kavkaz.ru";
 export const siteContent = {
   productName: "MADCORE 2.0",
   siteDomain: PREVIEW_SITE_DOMAIN,
+  displayDomainLabel: "madcore.site",
   heroImagePath: "/images/hero-metallic-premium-v1.png",
   siteTitle: "MADCORE 2.0 - консультация и заказ на Северном Кавказе",
   siteDescription:
@@ -28,10 +29,9 @@ export const siteContent = {
     "Оказывает положительное влияние на опорно-двигательный аппарат",
     "Улучшает качество кожи, волос и ногтей",
   ],
-  officialBandText: "Мы являемся официальным представителем Madcore",
-  officeTitle: "Наш адрес",
-  officeAddress:
-    "Наш офис находится в Нальчике, на улице Тарчокова 50, в офисном здании, 2-ой этаж, офис 24.",
+  officialBandText: "Мы являемся официальным представителем",
+  officeTitle: "",
+  officeAddress: "",
   stepsTitle: "Как сделать заказ",
   steps: [
     "Напишите в Telegram или WhatsApp.",
@@ -66,17 +66,23 @@ export function getSiteRuntimeConfig() {
   const dialPhone = toDialPhone(publicPhone);
   const publicAddress = process.env.PUBLIC_ADDRESS || siteContent.officeAddress;
   const siteDomain = process.env.SITE_DOMAIN || siteContent.siteDomain;
+  const displayDomain = process.env.SITE_DISPLAY_DOMAIN || siteContent.displayDomainLabel || siteDomain;
 
   return {
     productName,
     publicPrice,
     siteDomain,
+    displayDomain,
     publicBaseUrl: process.env.PUBLIC_BASE_URL || `https://${siteDomain}`,
     telegramUrl: process.env.TELEGRAM_GROUP_URL || "https://t.me/vorgesar",
+    telegramChatUrl: process.env.TELEGRAM_CHAT_URL || "https://t.me/MadCoreChat",
     whatsappUrl: process.env.WHATSAPP_URL || "https://wa.me/79042440444",
     maxUrl:
       process.env.MAX_URL ||
       "https://max.ru/u/f9LHodD0cOIXADxaRo9U9W_VHmDuRL5fMKsJO5O9YAs5rg0iZYqYmXKw0dw",
+    maxChatUrl:
+      process.env.MAX_CHAT_URL ||
+      "https://max.ru/join/gkeLUFOdvn5QYSNerv59YDPCxDSK388EPyAb7zxc6cw",
     publicPhone,
     dialPhone,
     publicAddress,

@@ -9,7 +9,6 @@ export const CLIENT_EVENT_NAMES = [
   "telegram_click",
   "max_click",
   "call_click",
-  "consultation_click",
   "form_start",
   "form_submit",
   "thanks_view",

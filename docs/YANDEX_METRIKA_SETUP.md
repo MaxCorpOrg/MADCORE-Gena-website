@@ -2,10 +2,11 @@
 
 ## Для этого проекта уже создан отдельный счетчик
 
-Нельзя использовать счетчик исходного сайта. Для `MADCORE Gena` уже создан отдельный preview-счетчик:
+Нельзя использовать счетчик исходного сайта. Для `MADCORE Gena` уже создан отдельный счетчик:
 
 - `109282367` — `MADCORE Gena preview`
-- host: `gena.madcore-kavkaz.ru`
+- текущий production-host: `madcore.site`
+- legacy preview-host: `gena.madcore-kavkaz.ru`
 
 ## Что уже заведено
 
@@ -15,12 +16,18 @@
   - `whatsapp_click`
   - `max_click`
   - `call_click`
-  - `consultation_click`
   - `form_start`
   - `form_submit`
   - `lead`
-- live preview реально отдает клиентский код Метрики с этим counter id;
-- `production-adtech-smoke.sh` на `https://gena.madcore-kavkaz.ru` прошел `2026-05-18`.
+- live production реально отдает клиентский код Метрики с этим counter id;
+- `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит.
+
+Текущий hero CTA больше не использует отдельное событие `consultation_click`. Вместо него работают:
+
+- `telegram_click`
+- `max_click`
+
+Если legacy-цель `consultation_click` уже создана в самой Метрике, ее можно оставить для исторических данных, но текущий интерфейс на нее больше не опирается.
 
 ## Что записывать в `.env`
 
@@ -44,4 +51,5 @@ YANDEX_METRIKA_TOKEN=<токен_если_нужен_для_api>
 - `reachGoal` срабатывает по всем CTA и отправке формы;
 - `client_id` сохраняется в tracking;
 - тестовый клик через `/go` сохраняет `yclid` и UTM;
-- после финального доменного cutover counter id и доменная привязка не остались на preview-host.
+- после финального доменного cutover counter id и доменная привязка не остались только на preview-host;
+- production HTML `https://madcore.site` отдает актуальный counter id `109282367`.

@@ -28,7 +28,7 @@ export default function ThanksPage() {
               maxUrl={maxUrl}
               callUrl={callUrl}
               callPhone={publicPhone}
-              withConsultation={false}
+              withChatLinks={false}
             />
           </div>
         </div>

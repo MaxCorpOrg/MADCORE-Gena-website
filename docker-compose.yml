@@ -30,6 +30,11 @@ services:
         MATOMO_DIMENSION_UTM_CONTENT: ${MATOMO_DIMENSION_UTM_CONTENT:-}
         MATOMO_DIMENSION_UTM_TERM: ${MATOMO_DIMENSION_UTM_TERM:-}
         SAFE_MODE_DISABLE_MATOMO: ${SAFE_MODE_DISABLE_MATOMO:-true}
+        SITE_DOMAIN: ${SITE_DOMAIN:-}
+        SITE_DISPLAY_DOMAIN: ${SITE_DISPLAY_DOMAIN:-}
+        SITE_WWW_DOMAIN: ${SITE_WWW_DOMAIN:-}
+        SITE_CERT_NAME: ${SITE_CERT_NAME:-}
+        PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-}
     container_name: madcore_gena_app
     restart: unless-stopped
     env_file:
