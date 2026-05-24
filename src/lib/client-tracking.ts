@@ -20,8 +20,26 @@ declare global {
   interface Window {
     _paq?: unknown[];
     ym?: (...args: unknown[]) => void;
+    __madcoreMatomoGoals?: Partial<Record<MatomoGoalName, string>>;
   }
 }
+
+type MatomoGoalName =
+  | "telegramClick"
+  | "whatsappClick"
+  | "maxClick"
+  | "callClick"
+  | "formSubmit"
+  | "lead";
+
+const MATOMO_GOAL_MAP: Partial<Record<string, MatomoGoalName>> = {
+  telegram_click: "telegramClick",
+  whatsapp_click: "whatsappClick",
+  max_click: "maxClick",
+  call_click: "callClick",
+  form_submit: "formSubmit",
+  lead: "lead",
+};
 
 function parseTrackingRecord(raw: unknown): TrackingData {
   if (!raw || typeof raw !== "object") return {};
@@ -163,6 +181,18 @@ export function trackMatomoEvent(action: string, name?: string) {
   window._paq.push(["trackEvent", "MADCORE_GENA", action, name ?? window.location.pathname]);
 }
 
+export function trackMatomoGoal(goalId: string) {
+  if (typeof window === "undefined" || !window._paq) return;
+
+  const mapped = MATOMO_GOAL_MAP[goalId];
+  if (!mapped) return;
+
+  const numericGoalId = Number(window.__madcoreMatomoGoals?.[mapped]);
+  if (!Number.isFinite(numericGoalId)) return;
+
+  window._paq.push(["trackGoal", numericGoalId]);
+}
+
 export function trackMetrikaGoal(goalId: string, params: Record<string, unknown> = {}) {
   if (typeof window === "undefined" || !window.ym || !METRIKA_COUNTER_ID) return;
   if (!METRIKA_GOAL_NAMES.has(goalId)) return;
@@ -171,6 +201,7 @@ export function trackMetrikaGoal(goalId: string, params: Record<string, unknown>
 
 export function trackExternalAnalyticsGoal(goalId: string, params: Record<string, unknown> = {}) {
   trackMatomoEvent(goalId, window.location.pathname);
+  trackMatomoGoal(goalId);
   trackMetrikaGoal(goalId, params);
 }
 

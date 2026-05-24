@@ -1,6 +1,6 @@
 # MADCORE Gena Deployment
 
-Обновлено: `2026-05-24` `chat CTA live deploy`
+Обновлено: `2026-05-24` `analytics hardening`
 
 ## Кратко
 
@@ -9,13 +9,13 @@
 - production:
   - `https://madcore.site`
   - `https://www.madcore.site`
-- legacy preview:
-  - `https://gena.madcore-kavkaz.ru`
-  - `https://www.gena.madcore-kavkaz.ru`
+- legacy redirect:
+  - `https://gena.madcore-kavkaz.ru` -> `https://madcore.site`
+  - `https://www.gena.madcore-kavkaz.ru` -> `https://madcore.site`
 - production TLS для `madcore.site` выпущен до `2026-08-21`
 - preview TLS выпущен до `2026-08-16`
 
-`madcore.site` является текущим production-доменом проекта. Preview-host оставлен живым как запасной адрес проверки.
+`madcore.site` является текущим production-доменом проекта. Старый временный домен `gena.madcore-kavkaz.ru` больше не используется как рабочий адрес сайта и должен только переводить трафик на `madcore.site`.
 
 ## Текущая схема выкладки
 
@@ -32,7 +32,7 @@
   - файл `/opt/madcore/nginx.conf`
   - контейнер `madcore_nginx`
 - production-host `madcore.site` проксируется из общего ingress на `http://genaapp:3000`;
-- legacy preview-host `gena.madcore-kavkaz.ru` также проксируется на `http://genaapp:3000`.
+- старый временный домен `gena.madcore-kavkaz.ru` должен редиректить на `https://madcore.site`.
 
 Важно: проектный `madcore_gena_nginx` и порты `8081/8444` в кодовой базе остаются подготовленной опцией, но в текущем production не используются как публичная входная точка.
 
@@ -126,6 +126,19 @@
   - `https://gena.madcore-kavkaz.ru/api/health` отвечает `200`;
   - live HTML `https://madcore.site` отдает `Перейти в чат Telegram` и `Перейти в чат Max`;
   - основной соседний сайт `https://madcore-kavkaz.ru` по-прежнему отдает отдельный счетчик `109236645`.
+- `2026-05-24 analytics hardening` дополнительно подтверждены:
+  - счетчик Яндекс.Метрики `109282367` переименован в `MADCORE Gena` и переведен на `madcore.site`;
+  - на стороне счетчика включены `webvisor`, `clickmap`, архивирование Вебвизора и `measurement_enabled`;
+  - для `madcore.site` в общем ingress добавлено условное снятие `X-Frame-Options` только для referer Яндекс.Метрики;
+  - в Matomo `site id = 2` переведен на `madcore.site` и дополнен URL-алиасами для production и legacy preview;
+  - в Matomo для `site id = 2` созданы visit custom dimensions `Click ID`, `YCLID`, `UTM Source`, `UTM Medium`, `UTM Campaign`;
+  - в Matomo для `site id = 2` созданы manual goals `telegram_click`, `whatsapp_click`, `max_click`, `call_click`, `form_submit`, `lead`;
+  - в `/opt/madcore-gena/.env` заполнены `MATOMO_DIMENSION_UTM_MEDIUM=4` и `MATOMO_GOAL_*`;
+  - `madcore_gena_app` пересобран и пересоздан с новым analytics runtime.
+- `2026-05-24 legacy domain retirement` дополнительно подтверждены:
+  - project defaults внутри `/home/max/MADCORE RF` переведены на `madcore.site`;
+  - `gena.madcore-kavkaz.ru` и `www.gena.madcore-kavkaz.ru` в общем ingress отдают `301` на `https://madcore.site`;
+  - из Matomo `site id = 2` удалены legacy URL старого домена.
 
 ## Что заполнять в `/opt/madcore-gena/.env`
 
@@ -135,6 +148,17 @@
 - `TELEGRAM_EXTRA_CHAT_IDS` уже задан для дополнительного получателя `@M_a_x_i_m_M_i_k_h_a_i_l_o_v`
 - `NEXT_PUBLIC_YANDEX_METRIKA_COUNTER_ID=109282367`
 - `MATOMO_SITE_ID=2`
+- `MATOMO_DIMENSION_CLICK_ID=1`
+- `MATOMO_DIMENSION_YCLID=2`
+- `MATOMO_DIMENSION_UTM_SOURCE=3`
+- `MATOMO_DIMENSION_UTM_MEDIUM=4`
+- `MATOMO_DIMENSION_UTM_CAMPAIGN=5`
+- `MATOMO_GOAL_TELEGRAM_CLICK_ID=1`
+- `MATOMO_GOAL_WHATSAPP_CLICK_ID=2`
+- `MATOMO_GOAL_MAX_CLICK_ID=3`
+- `MATOMO_GOAL_CALL_CLICK_ID=4`
+- `MATOMO_GOAL_FORM_SUBMIT_ID=5`
+- `MATOMO_GOAL_LEAD_ID=6`
 - `SITE_DOMAIN=madcore.site`
 - `SITE_WWW_DOMAIN=www.madcore.site`
 - `SITE_CERT_NAME=madcore.site`
@@ -177,21 +201,29 @@ SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.s
 METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site
 ```
 
-Проверка legacy preview:
+Проверка legacy redirect:
 
 ```bash
 cd /home/max/MADCORE RF
-./scripts/production-smoke.sh https://gena.madcore-kavkaz.ru
-METRIKA_COUNTER_ID=109282367 ./scripts/production-adtech-smoke.sh https://gena.madcore-kavkaz.ru
-```
-
-Важно: после production cutover и повторной пересборки app маршрут `https://gena.madcore-kavkaz.ru/go?...` сейчас редиректит на `https://madcore.site/safe`. Поэтому полный preview smoke больше не является надежной проверкой на совпадение host redirect. Для legacy preview сейчас корректнее отдельно проверять:
-
-```bash
 curl -Iks https://gena.madcore-kavkaz.ru
-curl -Iks https://gena.madcore-kavkaz.ru/api/health
 curl -Iks https://www.gena.madcore-kavkaz.ru
 ```
+
+Ожидаемое поведение:
+
+- оба legacy-адреса должны отдавать `301` на `https://madcore.site`.
+
+Проверка Вебвизора:
+
+```bash
+curl -Iks https://madcore.site
+curl -Iks -e https://metrika.yandex.ru/ https://madcore.site
+```
+
+Ожидаемое поведение:
+
+- без referer Метрики сайт отдает `X-Frame-Options: SAMEORIGIN`;
+- с referer Метрики заголовок снимается, чтобы Вебвизор мог открыть страницу.
 
 Проверка общего ingress:
 
@@ -203,6 +235,5 @@ docker exec madcore_nginx nginx -s reload
 
 ## Что осталось после cutover
 
-1. При необходимости обновить host/URL в Метрике и Matomo с preview-host на `madcore.site`.
-2. Если legacy preview должен остаться полностью автономным, вернуть ему собственный `/go`-redirect без ухода на `madcore.site`.
-3. Если receiving-chat будет меняться, обновить `TELEGRAM_CHAT_ID` и повторно проверить live lead notify.
+1. Если в Matomo нужны session replay и тепловые карты внутри самой Matomo, отдельно решить установку `HeatmapSessionRecording`.
+2. Если receiving-chat будет меняться, обновить `TELEGRAM_CHAT_ID` и повторно проверить live lead notify.

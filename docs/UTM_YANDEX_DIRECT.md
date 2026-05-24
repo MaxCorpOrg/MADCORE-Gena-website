@@ -12,8 +12,8 @@
 
 - весь рекламный трафик идет только через `/go`;
 - нельзя использовать старые `cmp` от исходного сайта;
-- пока для ссылок используется временный preview-адрес `https://gena.madcore-kavkaz.ru`;
-- после выбора финального домена helper должен печатать уже его через `PUBLIC_BASE_URL`;
+- рабочий домен для ссылок: `https://madcore.site`;
+- helper по умолчанию должен печатать `madcore.site` через `PUBLIC_BASE_URL`;
 - `yclid` и `click_id` должны передаваться без потерь;
 - `utm_medium=telegram` использовать только для отдельной кампании `Телеграм-каналы`.
 
@@ -28,11 +28,11 @@
 Примеры:
 
 ```text
-https://gena.madcore-kavkaz.ru/go?src=yandex&cmp=madcore_gena_site&cr={ad_id}&click_id={gbid}&utm_source=yandex&utm_medium=cpc&utm_campaign={campaign_id}&utm_content={ad_id}&utm_term={keyword}&yclid={yclid}
+https://madcore.site/go?src=yandex&cmp=madcore_gena_site&cr={ad_id}&click_id={gbid}&utm_source=yandex&utm_medium=cpc&utm_campaign={campaign_id}&utm_content={ad_id}&utm_term={keyword}&yclid={yclid}
 
-https://gena.madcore-kavkaz.ru/go?src=yandex&cmp=madcore_gena_max&cr={ad_id}&click_id={gbid}&utm_source=yandex&utm_medium=cpc&utm_campaign={campaign_id}&utm_content={ad_id}&utm_term={keyword}&yclid={yclid}
+https://madcore.site/go?src=yandex&cmp=madcore_gena_max&cr={ad_id}&click_id={gbid}&utm_source=yandex&utm_medium=cpc&utm_campaign={campaign_id}&utm_content={ad_id}&utm_term={keyword}&yclid={yclid}
 
-https://gena.madcore-kavkaz.ru/go?src=yandex&cmp=madcore_gena_tg_channels&cr={ad_id}&click_id={gbid}&utm_source=yandex&utm_medium=telegram&utm_campaign={campaign_id}&utm_content={ad_id}&utm_term={keyword}&yclid={yclid}
+https://madcore.site/go?src=yandex&cmp=madcore_gena_tg_channels&cr={ad_id}&click_id={gbid}&utm_source=yandex&utm_medium=telegram&utm_campaign={campaign_id}&utm_content={ad_id}&utm_term={keyword}&yclid={yclid}
 ```
 
 ## Что проверить

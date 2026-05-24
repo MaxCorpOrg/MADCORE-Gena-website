@@ -17,7 +17,7 @@ npm run dev:status
 npm run dev:stop
 ```
 
-Для preview-контура можно взять готовую основу:
+Для локального контура можно взять готовую основу:
 
 ```bash
 cp .env.preview.example .env
@@ -32,15 +32,14 @@ METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/producti
 
 Если новый счетчик Яндекс.Метрики еще не создан, `production-adtech-smoke.sh` допускает запуск без `METRIKA_COUNTER_ID` и пропускает live-проверку presence-кода.
 
-Для legacy preview используйте отдельные проверки с оговоркой:
+Для проверки старого домена после его вывода из активного контура достаточно убедиться, что он переводит на production:
 
 ```bash
 curl -Iks https://gena.madcore-kavkaz.ru
 curl -Iks https://www.gena.madcore-kavkaz.ru
-curl -Iks https://gena.madcore-kavkaz.ru/api/health
 ```
 
-Важно: `https://gena.madcore-kavkaz.ru/go?...` сейчас редиректит на `https://madcore.site/safe`, поэтому полный preview smoke больше не является эталонной проверкой самостоятельного host redirect.
+Ожидаемое поведение: оба адреса должны отдавать `301` на `https://madcore.site`.
 
 ## Что проверять после развертывания
 

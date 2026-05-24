@@ -1,8 +1,8 @@
-const PREVIEW_SITE_DOMAIN = "gena.madcore-kavkaz.ru";
+const DEFAULT_SITE_DOMAIN = "madcore.site";
 
 export const siteContent = {
   productName: "MADCORE 2.0",
-  siteDomain: PREVIEW_SITE_DOMAIN,
+  siteDomain: DEFAULT_SITE_DOMAIN,
   displayDomainLabel: "madcore.site",
   heroImagePath: "/images/hero-metallic-premium-v1.png",
   siteTitle: "MADCORE 2.0 - консультация и заказ на Северном Кавказе",

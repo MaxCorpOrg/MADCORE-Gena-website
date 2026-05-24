@@ -22,7 +22,7 @@
 - целевой remote: `git@github.com:MaxCorpOrg/MADCORE-Gena-website.git`
 - стек: `Next.js + TypeScript + Tailwind + Prisma + PostgreSQL`
 - текущий production: `https://madcore.site`
-- legacy preview: `https://gena.madcore-kavkaz.ru`
+- старый временный домен: `https://gena.madcore-kavkaz.ru` -> должен редиректить на `https://madcore.site`
 
 ## Что уже сделано
 
@@ -42,9 +42,17 @@
   - `madcore_gena_app`
   - общий ingress `madcore_nginx`
 - через API Яндекс.Метрики уже создан отдельный счетчик `109282367` и заведены отдельные JS-цели проекта;
+- `2026-05-24` счетчик Метрики уже переведен на `madcore.site`, в нем включены Вебвизор и карты кликов;
+- `2026-05-24` в Метрике уже сохранена первая воронка:
+  - `Главная -> отправка формы`
+  - `https://madcore.site/` -> `form_submit`
 - в Matomo уже создан отдельный `site id = 2`;
+- `2026-05-24` для Matomo уже настроены:
+  - основной site URL под `madcore.site`;
+  - visit custom dimensions `Click ID`, `YCLID`, `UTM Source`, `UTM Medium`, `UTM Campaign`;
+  - manual goals `telegram_click`, `whatsapp_click`, `max_click`, `call_click`, `form_submit`, `lead`;
 - для production уже выпущен TLS на `madcore.site`;
-- для legacy preview уже выпущен TLS на `gena.madcore-kavkaz.ru`.
+- для старого временного домена `gena.madcore-kavkaz.ru` сертификат пока остается, чтобы redirect работал без ошибок.
 - отдельный Telegram-бот `@MadcoreGenaLeadsBot` уже создан;
 - live notify в новый бот подтвержден тестовой заявкой.
 - `2026-05-23` добавлен дополнительный получатель Telegram-уведомлений `@M_a_x_i_m_M_i_k_h_a_i_l_o_v` через `TELEGRAM_EXTRA_CHAT_IDS`;
@@ -52,9 +60,11 @@
 
 ## Что еще не закрыто
 
+- при необходимости добавить еще прикладные воронки Метрики:
+  - `Главная -> переход в Telegram`
+  - `Главная -> lead`
 - при необходимости нужно перевести receiving-chat бота с текущей рабочей лички `AK5` на другой чат или группу;
-- при необходимости нужно обновить доменные привязки аналитики под `madcore.site`.
-- если legacy preview должен оставаться полностью самостоятельным, нужно отдельно вернуть ему собственный `/go`-redirect без ухода на `https://madcore.site/safe`.
+- если в Matomo нужны встроенные session replay и тепловые карты, нужно отдельно решать установку `HeatmapSessionRecording`.
 
 ## Что уже подтверждено дополнительно
 
@@ -63,16 +73,16 @@
 - `bash ./scripts/repo-adtech-audit.sh` проходит;
 - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
 - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+- для обычных пользователей `madcore.site` по-прежнему отдает `X-Frame-Options: SAMEORIGIN`, а для referer Яндекс.Метрики заголовок снимается, чтобы Вебвизор мог открывать страницу;
 - основной сайт `https://madcore-kavkaz.ru` после включения preview-host остался живым.
 - `https://madcore.site` в live HTML отдает:
   - `Перейти в чат Telegram`
   - `Перейти в чат Max`
-- `https://gena.madcore-kavkaz.ru/api/health` отвечает `200`.
+- старый домен `https://gena.madcore-kavkaz.ru` больше не нужен как рабочий адрес и должен переводить трафик на `https://madcore.site`.
 
 Важно:
 
-- legacy preview `https://gena.madcore-kavkaz.ru` жив для просмотра страниц и health-check;
-- но его маршрут `/go` сейчас редиректит на `https://madcore.site/safe`, поэтому полный preview smoke больше нельзя считать эталонной проверкой независимого host redirect.
+- `gena.madcore-kavkaz.ru` больше не считать preview-контуром; это только legacy-адрес, который должен редиректить на production.
 
 ## Что обязательно сделать перед серверными действиями
 

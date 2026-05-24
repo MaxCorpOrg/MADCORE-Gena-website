@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DEFAULT_BASE_URL="${PUBLIC_BASE_URL:-https://gena.madcore-kavkaz.ru}"
-DEFAULT_WWW_URL="https://${SITE_WWW_DOMAIN:-www.gena.madcore-kavkaz.ru}"
+DEFAULT_BASE_URL="${PUBLIC_BASE_URL:-https://madcore.site}"
+DEFAULT_WWW_URL="https://${SITE_WWW_DOMAIN:-www.madcore.site}"
 BASE_URL="${1:-$DEFAULT_BASE_URL}"
 WWW_URL="${WWW_URL:-$DEFAULT_WWW_URL}"
 CURL_UA="${CURL_UA:-Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125 Safari/537.36 MADCOREGenaSmoke/1.0}"

@@ -1,6 +1,6 @@
 # MADCORE Gena Project Checkpoint
 
-Обновлено: `2026-05-24` `chat CTA live deploy`
+Обновлено: `2026-05-24` `analytics hardening + metrika funnel`
 
 ## Проект
 
@@ -8,7 +8,7 @@
 - локальный путь: `/home/max/MADCORE RF`
 - remote: `git@github.com:MaxCorpOrg/MADCORE-Gena-website.git`
 - production: `https://madcore.site`
-- legacy preview: `https://gena.madcore-kavkaz.ru`
+- legacy redirect: `https://gena.madcore-kavkaz.ru` -> `https://madcore.site`
 - выбранный целевой домен: `madcore.site`
 - server directory: `/opt/madcore-gena`
 - `MATOMO_SITE_ID`: `2`
@@ -33,6 +33,16 @@
   - вместо широкой кнопки `Получить консультацию` теперь используются две отдельные chat-кнопки;
   - мобильный порядок: `WhatsApp -> Telegram -> MaX -> чат Telegram -> чат Max -> звонок`;
   - десктопный нижний ряд состоит из двух малых chat-кнопок;
+- production-аналитика уже доведена:
+  - счетчик Яндекс.Метрики `109282367` работает на `madcore.site`;
+  - Вебвизор и карты кликов включены на стороне счетчика;
+  - для referer Яндекс.Метрики ingress снимает `X-Frame-Options`, а для обычных пользователей сохраняет `SAMEORIGIN`;
+  - Matomo `site id = 2` переведен на `madcore.site` и дополнен URL-алиасами;
+  - для Matomo настроены visit custom dimensions `Click ID`, `YCLID`, `UTM Source`, `UTM Medium`, `UTM Campaign`;
+  - для Matomo настроены manual goals `telegram_click`, `whatsapp_click`, `max_click`, `call_click`, `form_submit`, `lead`;
+  - в Метрике уже сохранена воронка `Главная -> отправка формы`:
+    - шаг `1`: просмотр страницы `https://madcore.site/`
+    - шаг `2`: достижение JS-цели `form_submit`
 - перед live-заменой CTA-файлов на сервере создана резервная копия:
   - `/opt/madcore-gena/.backup/20260524-122052`;
 - проектный `madcore_gena_nginx` в коде остается подготовленным, но в текущем production TLS и host-routing обслуживаются общим `madcore_nginx`.
@@ -41,14 +51,14 @@
 
 - отдельная рабочая директория заполнена кодом нового проекта;
 - `src/config/site.ts` переведен на:
-  - preview-host по умолчанию
+  - `madcore.site` по умолчанию
   - новые ссылки Telegram / WhatsApp / MaX
   - новый номер телефона
   - публичный copy с основного `MADCORE-website`
 - `CtaButtons`, `LeadForm`, `lead-message`, `validation` и tracking обновлены под `MaX`;
 - server routes `/api/lead`, `/api/event`, `/go` переведены на `madcore_gena_tracking`;
 - `docker-compose.yml`, `nginx.conf` и server scripts разведены под `/opt/madcore-gena`;
-- preview-host вынесен в настраиваемые переменные окружения;
+- site domain вынесен в настраиваемые переменные окружения;
 - добавлен отдельный шаблон `.env.preview.example`;
 - `.env.example` и `.env.preview.example` обновлены под публичный `PRODUCT_NAME=MADCORE 2.0` и новый `PUBLIC_ADDRESS`;
 - через OpenAI Image2 сгенерированы и подключены:
@@ -76,7 +86,7 @@
   - `Мы являемся официальным представителем MADCORE 2.0`
 - helper `scripts/print-yandex-direct-campaign-links.sh` переведен на `madcore_gena_*`;
 - через API Яндекс.Метрики создан отдельный счетчик `109282367` и отдельные JS-цели проекта;
-- в Matomo создан отдельный сайт `MADCORE Gena preview` с `site id = 2`;
+- в Matomo создан и затем переведен на production отдельный сайт `MADCORE Gena` с `site id = 2`;
 - через Timeweb DNS добавлены `gena.madcore-kavkaz.ru` и `www.gena.madcore-kavkaz.ru`;
 - выпущен Let's Encrypt сертификат для preview-host и `www`, действующий до `2026-08-16`;
 - на сервере развернут preview-контур в `/opt/madcore-gena`;
@@ -100,6 +110,26 @@
   - `src/app/thanks/page.tsx`
   - `src/app/globals.css`
 - `2026-05-24` `madcore_gena_app` пересобран через `docker compose build app` и пересоздан через `docker compose up -d app`;
+- `2026-05-24` `src/components/Matomo.tsx`, `src/app/layout.tsx`, `src/lib/client-tracking.ts`, `Dockerfile` и `docker-compose.yml` расширены под:
+  - `MATOMO_DIMENSION_UTM_MEDIUM`
+  - `MATOMO_GOAL_*`
+  - client-side `trackGoal` для Matomo поверх уже существующих `trackEvent`;
+- `2026-05-24` в `/opt/madcore-gena/.env` выставлены:
+  - `MATOMO_DIMENSION_CLICK_ID=1`
+  - `MATOMO_DIMENSION_YCLID=2`
+  - `MATOMO_DIMENSION_UTM_SOURCE=3`
+  - `MATOMO_DIMENSION_UTM_MEDIUM=4`
+  - `MATOMO_DIMENSION_UTM_CAMPAIGN=5`
+  - `MATOMO_GOAL_TELEGRAM_CLICK_ID=1`
+  - `MATOMO_GOAL_WHATSAPP_CLICK_ID=2`
+  - `MATOMO_GOAL_MAX_CLICK_ID=3`
+  - `MATOMO_GOAL_CALL_CLICK_ID=4`
+  - `MATOMO_GOAL_FORM_SUBMIT_ID=5`
+  - `MATOMO_GOAL_LEAD_ID=6`
+- `2026-05-24` старый временный домен выведен из активного контура:
+  - project defaults и рабочие сценарии теперь используют `madcore.site`;
+  - `gena.madcore-kavkaz.ru` и `www.gena.madcore-kavkaz.ru` переведены в `301` на `https://madcore.site`;
+  - из Matomo `site id = 2` удалены legacy URL старого домена;
 - `madcore_gena_app` пересоздан на VPS с новым Telegram-конфигом.
 - `2026-05-19` live preview перевыкатан с новым metallic visual и source-copy;
 - на сервере обновлены live overrides:
@@ -175,6 +205,25 @@
   - `https://gena.madcore-kavkaz.ru/api/health` отвечает `200`;
   - `https://madcore-kavkaz.ru` по-прежнему отдает отдельный счетчик `109236645`;
   - `https://madcore.site` отдает отдельный счетчик `109282367`;
+- после analytics hardening `2026-05-24` подтверждены:
+  - `npm run lint`
+  - `npm run build`
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site`
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site`
+  - `https://madcore.site/api/health` отвечает `200`;
+  - `https://madcore-kavkaz.ru/api/health` отвечает `200`;
+  - `madcore.site` без referer Метрики отдает `X-Frame-Options: SAMEORIGIN`;
+  - `madcore.site` с referer Метрики отдает страницу без `X-Frame-Options`;
+  - в собранном контейнере `madcore_gena_app` найден `__madcoreMatomoGoals` и вызов `trackGoal`;
+  - в Matomo `site id = 2` подтверждены custom dimensions и manual goals;
+- через живой интерфейс Метрики сохранена и открывается воронка `Главная -> отправка формы`;
+- после legacy domain retirement `2026-05-24` подтверждены:
+  - `https://gena.madcore-kavkaz.ru` отдает `301` на `https://madcore.site/`;
+  - `https://www.gena.madcore-kavkaz.ru` отдает `301` на `https://madcore.site/`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site`;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site`;
+  - `https://madcore.site/api/health` отвечает `200`;
+  - `https://madcore-kavkaz.ru/api/health` отвечает `200`;
 - текущее ограничение legacy preview после live deploy:
   - `https://gena.madcore-kavkaz.ru` остается доступен по `/`, `/privacy`, `/thanks` и `/api/health`;
   - но `https://gena.madcore-kavkaz.ru/go?...` сейчас редиректит на `https://madcore.site/safe`;
@@ -185,11 +234,19 @@
 
 ## Не завершено
 
-- при необходимости нужно обновить host/URL в Метрике и Matomo под финальный домен `madcore.site`.
-- если legacy preview должен оставаться полностью самостоятельным, нужно отдельно вернуть ему собственный `/go`-redirect без ухода на `madcore.site`.
+- если в Matomo нужны встроенные session replay и тепловые карты, нужно отдельно ставить `HeatmapSessionRecording`.
+
+## На чем остановились
+
+- production `https://madcore.site` уже работает на отдельном счетчике Метрики `109282367` и отдельном Matomo `site id = 2`;
+- Вебвизор Метрики уже разблокирован через условное поведение `X-Frame-Options` в общем ingress;
+- в Matomo уже есть боевые URL, visit custom dimensions и manual goals;
+- в Метрике уже есть базовая сохраненная воронка для пути `главная -> отправка формы`;
+- соседний основной сайт `https://madcore-kavkaz.ru` после этих правок остался рабочим и не подменился;
+- ближайшее незавершенное решение теперь не про базовую аналитику, а про:
+  - отдельную установку `HeatmapSessionRecording`, если нужен session replay внутри Matomo.
 
 ## Что делать дальше
 
-1. При необходимости обновить привязки Метрики и Matomo под финальный домен.
-2. Если legacy preview должен оставаться полноценным запасным контуром, вернуть ему собственный `/go`-redirect без ухода на `madcore.site`.
-3. Если лиды должны приходить не в текущую личку `AK5`, запустить бота из нового чата и обновить `TELEGRAM_CHAT_ID`.
+1. Если нужен session replay и тепловые карты внутри Matomo, отдельно установить `HeatmapSessionRecording`.
+2. Если лиды должны приходить не в текущую личку `AK5`, запустить бота из нового чата и обновить `TELEGRAM_CHAT_ID`.

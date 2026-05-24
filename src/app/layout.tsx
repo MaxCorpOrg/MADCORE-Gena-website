@@ -37,9 +37,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             clickId: process.env.MATOMO_DIMENSION_CLICK_ID,
             yclid: process.env.MATOMO_DIMENSION_YCLID,
             utmSource: process.env.MATOMO_DIMENSION_UTM_SOURCE,
+            utmMedium: process.env.MATOMO_DIMENSION_UTM_MEDIUM,
             utmCampaign: process.env.MATOMO_DIMENSION_UTM_CAMPAIGN,
             utmContent: process.env.MATOMO_DIMENSION_UTM_CONTENT,
             utmTerm: process.env.MATOMO_DIMENSION_UTM_TERM,
+          }}
+          goals={{
+            telegramClick: process.env.MATOMO_GOAL_TELEGRAM_CLICK_ID,
+            whatsappClick: process.env.MATOMO_GOAL_WHATSAPP_CLICK_ID,
+            maxClick: process.env.MATOMO_GOAL_MAX_CLICK_ID,
+            callClick: process.env.MATOMO_GOAL_CALL_CLICK_ID,
+            formSubmit: process.env.MATOMO_GOAL_FORM_SUBMIT_ID,
+            lead: process.env.MATOMO_GOAL_LEAD_ID,
           }}
         />
         <Suspense fallback={null}>

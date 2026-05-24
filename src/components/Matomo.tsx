@@ -13,9 +13,18 @@ type MatomoProps = {
     clickId?: string;
     yclid?: string;
     utmSource?: string;
+    utmMedium?: string;
     utmCampaign?: string;
     utmContent?: string;
     utmTerm?: string;
+  };
+  goals?: {
+    telegramClick?: string;
+    whatsappClick?: string;
+    maxClick?: string;
+    callClick?: string;
+    formSubmit?: string;
+    lead?: string;
   };
 };
 
@@ -29,12 +38,15 @@ export default function Matomo({
   siteId,
   disableOnSafe = true,
   dimensions,
+  goals,
 }: MatomoProps) {
   const pathname = usePathname();
   const base = matomoUrl ? (matomoUrl.endsWith("/") ? matomoUrl : `${matomoUrl}/`) : "";
+  const serializedGoals = JSON.stringify(goals ?? {});
 
   const setup = `
     window._paq = window._paq || [];
+    window.__madcoreMatomoGoals = ${serializedGoals};
     window._paq.push(['setTrackerUrl', '${base}matomo.php']);
     window._paq.push(['setSiteId', '${siteId}']);
     window._paq.push(['alwaysUseSendBeacon']);
@@ -51,6 +63,7 @@ export default function Matomo({
     setDimension(queue, dimensions?.clickId, tracking.click_id);
     setDimension(queue, dimensions?.yclid, tracking.yclid);
     setDimension(queue, dimensions?.utmSource, tracking.utm_source);
+    setDimension(queue, dimensions?.utmMedium, tracking.utm_medium);
     setDimension(queue, dimensions?.utmCampaign, tracking.utm_campaign);
     setDimension(queue, dimensions?.utmContent, tracking.utm_content);
     setDimension(queue, dimensions?.utmTerm, tracking.utm_term);

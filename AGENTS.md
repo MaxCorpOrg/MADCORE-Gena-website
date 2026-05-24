@@ -13,10 +13,10 @@
 - Проект: отдельный сайт `MADCORE Gena`
 - Локальный путь: `/home/max/MADCORE RF`
 - Целевой remote: `git@github.com:MaxCorpOrg/MADCORE-Gena-website.git`
-- Временный preview-адрес по текущему checkpoint:
-  - сайт: `https://gena.madcore-kavkaz.ru`
-  - `www`: `https://www.gena.madcore-kavkaz.ru`
-  - это не финальный домен проекта
+- Рабочий production-домен:
+  - сайт: `https://madcore.site`
+  - `www`: `https://www.madcore.site`
+- Старый временный домен `gena.madcore-kavkaz.ru` больше не считается рабочим адресом и должен только переводить трафик на `https://madcore.site`
 - Matomo по этой точке использует общий хост `https://analytics.madcore-kavkaz.ru`, но для `MADCORE Gena` нужен отдельный `site id`.
 
 ## Обязательный маршрут входа
@@ -60,6 +60,7 @@
   - отдельный бот для заявок;
   - отдельная точка развёртывания `/opt/madcore-gena`.
 - Не возвращать проект к старым значениям `madcore-kavkaz.ru`, старому номеру или старым рекламным `cmp`.
+- Не возвращать проект к использованию `gena.madcore-kavkaz.ru` как рабочего домена.
 - Не коммитить `.env*`, ключи, токены, пароли и runtime-мусор.
 
 ## Документационная дисциплина

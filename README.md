@@ -9,10 +9,7 @@
 - `https://madcore.site`
 - `https://www.madcore.site`
 
-Legacy preview сохранен как запасной адрес:
-
-- `https://gena.madcore-kavkaz.ru`
-- `https://www.gena.madcore-kavkaz.ru`
+Старый временный домен `gena.madcore-kavkaz.ru` больше не считается рабочим адресом сайта и должен переводить трафик на `https://madcore.site`.
 
 ## Кратко
 
@@ -66,8 +63,7 @@ Legacy preview сохранен как запасной адрес:
 
 ## Что еще осталось
 
-- при необходимости обновить доменные привязки Метрики и Matomo;
-- если legacy preview должен оставаться полностью автономным, вернуть ему собственный `/go`-redirect без ухода на `madcore.site`;
+- при необходимости отдельно расширить Matomo модулем `HeatmapSessionRecording`;
 - при необходимости перевести лиды с текущей рабочей лички `AK5` на другой receiving-chat.
 
 ## Команды
@@ -87,7 +83,7 @@ npm run dev:status
 npm run dev:stop
 ```
 
-Для временного preview-контура можно стартовать от отдельного шаблона окружения:
+Для локального старта можно использовать готовый шаблон окружения:
 
 ```bash
 cp .env.preview.example .env

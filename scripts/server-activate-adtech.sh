@@ -2,7 +2,7 @@
 set -euo pipefail
 
 APP_DIR="${APP_DIR:-/opt/madcore-gena}"
-BASE_URL="${BASE_URL:-${PUBLIC_BASE_URL:-https://gena.madcore-kavkaz.ru}}"
+BASE_URL="${BASE_URL:-${PUBLIC_BASE_URL:-https://madcore.site}}"
 METRIKA_COUNTER_ID="${METRIKA_COUNTER_ID:-}"
 DIRECT_CLIENT_LOGIN="${DIRECT_CLIENT_LOGIN:-Max.Corp.Org}"
 ENV_FILE="${ENV_FILE:-$APP_DIR/.env}"
