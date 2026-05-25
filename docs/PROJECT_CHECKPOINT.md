@@ -1,6 +1,6 @@
 # MADCORE Gena Project Checkpoint
 
-Обновлено: `2026-05-25` `seo-hardening branch prepared`
+Обновлено: `2026-05-25` `seo metadata hardening`
 
 ## Проект
 
@@ -66,6 +66,10 @@
   - `JSON-LD` со схемами `WebSite` и `Organization`;
   - явный `openGraph.url`;
   - этот пакет пока проверен только локально и еще не выкачивался на production;
+- в ветке `seo-hardening` уже подготовлен следующий SEO metadata-layer:
+  - поддержка `GOOGLE_SITE_VERIFICATION` через env и metadata;
+  - `JSON-LD` расширен схемой `Product` с `Offer` и ценой;
+  - `.env.example` и `.env.preview.example` уже содержат `GOOGLE_SITE_VERIFICATION`;
 - перед live-заменой CTA-файлов на сервере создана резервная копия:
   - `/opt/madcore-gena/.backup/20260524-122052`;
 - проектный `madcore_gena_nginx` в коде остается подготовленным, но в текущем production TLS и host-routing обслуживаются общим `madcore_nginx`.
@@ -203,6 +207,9 @@
   - в локальном HTML уже отдаются:
     - `<link rel="canonical" href="https://madcore.site"/>`
     - `<script type="application/ld+json">...`;
+  - после metadata-hardening повторно проходят:
+    - `npm run lint`;
+    - `npm run build`;
 - `npm run lint` проходит;
 - `npm run build` проходит;
 - `bash ./scripts/repo-adtech-audit.sh` проходит;
@@ -330,6 +337,7 @@
 - production `https://madcore.site` уже отдает короткий title без `Северного Кавказа`;
 - для свежих Webvisor-сессий страница открывается штатно, а оставшийся риск касается именно исторических replay после rebuild;
 - SEO-доработка вынесена в отдельную ветку `seo-hardening`, где уже готов безопасный пакет `canonical + JSON-LD`;
+- в этой SEO-ветке уже подготовлена и поддержка `GOOGLE_SITE_VERIFICATION`, так что подключение Search Console теперь не требует новой правки кода;
 - этот SEO-пакет пока не на production и ждет отдельного решения о merge/выкладке;
 - соседний основной сайт `https://madcore-kavkaz.ru` после этих правок остался рабочим и не подменился;
 - ближайшее незавершенное решение теперь не про базовую аналитику, а про:

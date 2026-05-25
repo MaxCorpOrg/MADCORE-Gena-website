@@ -1,6 +1,6 @@
 # MADCORE Gena Project Status
 
-Обновлено: `2026-05-25` `seo-hardening branch prepared`
+Обновлено: `2026-05-25` `seo metadata hardening`
 
 ## Контрольная точка
 
@@ -28,6 +28,11 @@
   - `JSON-LD` со схемами `WebSite` и `Organization`;
   - явный `openGraph.url`;
   - этот пакет пока существует только в отдельной SEO-ветке и еще не выкачивался на production;
+- `2026-05-25` в этой же ветке `seo-hardening` выполнен следующий safe-layer SEO metadata:
+  - добавлена поддержка `GOOGLE_SITE_VERIFICATION` через metadata и env;
+  - `JSON-LD` расширен схемой `Product` с `Offer` и ценой;
+  - `openGraph` и `twitter` дополнены более явными SEO-значениями;
+  - `.env.example` и `.env.preview.example` расширены переменной `GOOGLE_SITE_VERIFICATION`;
 - создана самостоятельная копия проекта на базе `MADCORE-website`;
 - проект переименован в `MADCORE Gena`;
 - отдельные CTA и runtime-конфиг переведены на новые контакты `Gena`:
@@ -361,6 +366,7 @@
 - Вебвизор для свежих сессий уже может открыть страницу штатно, но у исторических replay после деплоев остается инфраструктурный риск потери старых `/_next/static/*`;
 - отдельная ветка `seo-hardening` уже создана и проверена локально;
 - safe SEO-пакет `canonical + JSON-LD` уже готов в отдельном `worktree`, но пока не находится на live `https://madcore.site`;
+- Search Console verification уже подготовлен на уровне кода и ждет только реальный verification token в env;
 - production-аналитика уже доведена:
   - Метрика работает на `madcore.site` с Вебвизором и картами;
   - Matomo работает на `site id = 2` с боевыми URL, custom dimensions и manual goals;

@@ -5,7 +5,9 @@ import Matomo from "@/components/Matomo";
 import YandexMetrika from "@/components/YandexMetrika";
 import { getSiteRuntimeConfig, siteContent } from "@/config/site";
 
-const { publicBaseUrl, publicPhone } = getSiteRuntimeConfig();
+const { productName, publicBaseUrl, publicPhone } = getSiteRuntimeConfig();
+const publicPriceValue = String(Number(process.env.PUBLIC_PRICE || "14000"));
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION;
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -18,7 +20,7 @@ const structuredData = {
     },
     {
       "@type": "Organization",
-      name: siteContent.productName,
+      name: productName,
       url: publicBaseUrl,
       logo: `${publicBaseUrl}/icon.png`,
       contactPoint: [
@@ -31,6 +33,23 @@ const structuredData = {
         },
       ],
     },
+    {
+      "@type": "Product",
+      name: productName,
+      description: siteContent.productDescription.replace(siteContent.productName, productName),
+      image: [`${publicBaseUrl}${siteContent.heroImagePath}`],
+      brand: {
+        "@type": "Brand",
+        name: "MADCORE",
+      },
+      offers: {
+        "@type": "Offer",
+        url: publicBaseUrl,
+        priceCurrency: "RUB",
+        price: publicPriceValue,
+        availability: "https://schema.org/InStock",
+      },
+    },
   ],
 };
 
@@ -38,13 +57,25 @@ export const metadata: Metadata = {
   metadataBase: new URL(publicBaseUrl),
   title: siteContent.siteTitle,
   description: siteContent.siteDescription,
+  verification: googleSiteVerification
+    ? {
+        google: googleSiteVerification,
+      }
+    : undefined,
   openGraph: {
-    title: siteContent.productName,
+    title: productName,
     description: siteContent.ogDescription,
     url: publicBaseUrl,
+    siteName: productName,
     images: [siteContent.heroImagePath],
     type: "website",
     locale: "ru_RU",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: productName,
+    description: siteContent.ogDescription,
+    images: [siteContent.heroImagePath],
   },
 };
 
