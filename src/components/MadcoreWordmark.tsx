@@ -9,7 +9,7 @@ export default function MadcoreWordmark() {
         aria-hidden="true"
         width={2079}
         height={384}
-        priority
+        sizes="(min-width: 1024px) 36rem, (min-width: 640px) 32rem, calc(100vw - 2rem)"
         className="madcore-wordmark-image"
       />
     </div>

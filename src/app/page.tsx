@@ -108,6 +108,7 @@ export default function HomePage() {
                   width={1100}
                   height={1400}
                   priority
+                  sizes="(min-width: 1024px) 44vw, 100vw"
                   className="hero-image"
                 />
               </div>
@@ -179,7 +180,7 @@ export default function HomePage() {
                     alt="Премиальная металлическая карточка продукта MADCORE 2.0"
                     width={1254}
                     height={1254}
-                    loading="eager"
+                    sizes="(min-width: 1024px) 34vw, 90vw"
                     className="product-card-image"
                   />
                 </div>

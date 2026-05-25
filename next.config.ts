@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   serverExternalPackages: ["geoip-lite"],
   images: {
-    unoptimized: true,
     formats: ["image/avif", "image/webp"],
   },
 };

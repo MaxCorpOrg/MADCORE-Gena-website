@@ -1,6 +1,6 @@
 # MADCORE Gena Project Checkpoint
 
-Обновлено: `2026-05-25` `выкладка мобильных кнопок чатов`
+Обновлено: `2026-05-25` `metadata title cleanup`
 
 ## Проект
 
@@ -44,6 +44,17 @@
   - в Метрике уже сохранена воронка `Главная -> отправка формы`:
     - шаг `1`: просмотр страницы `https://madcore.site/`
     - шаг `2`: достижение JS-цели `form_submit`
+- production performance уже подтянут:
+  - тяжелые фоновые PNG заменены на `.webp`;
+  - `next/image` снова работает в оптимизированном режиме;
+  - logo и product-card больше не preload/eager, hero-image оставлен единственным ранним critical-image;
+  - Lighthouse performance после live-правки вырос примерно `0.60 -> 0.83`, а LCP улучшился примерно `4.9s -> 2.7s`;
+- по Яндекс.Вебвизору уже зафиксировано текущее объяснение:
+  - свежие live-сессии открываются нормально;
+  - наиболее вероятный источник "сломанного" вида у старых replay после деплоя: исторические hashed-файлы `/_next/static/*` не сохраняются между сборками;
+- production metadata уже уточнены:
+  - `siteTitle` сокращен с `MADCORE 2.0 - консультация и заказ на Северном Кавказе` до `MADCORE 2.0 - консультация и заказ`;
+  - live `madcore.site` уже отдает короткий `<title>` без региональной приписки;
 - перед live-заменой CTA-файлов на сервере создана резервная копия:
   - `/opt/madcore-gena/.backup/20260524-122052`;
 - проектный `madcore_gena_nginx` в коде остается подготовленным, но в текущем production TLS и host-routing обслуживаются общим `madcore_nginx`.
@@ -113,6 +124,22 @@
   - на сервер передан только `src/app/globals.css`;
   - затем выполнены `docker compose build app` и `docker compose up -d app`;
   - боевой CSS-бандл `madcore.site` уже содержит мобильные селекторы для компактного ряда этих кнопок чатов;
+- `2026-05-25` выполнена отдельная performance-правка production:
+  - перед заменой создан backup `/opt/madcore-gena/.backup/20260525-140649-performance-and-webvisor-review`;
+  - в `next.config.ts` включена обратно оптимизация `next/image` за счет удаления `images.unoptimized`;
+  - `src/app/globals.css` переведен на `background-metallic-brushed-v1.webp` и `background-metallic-mobile-v1.webp`;
+  - `src/components/MadcoreWordmark.tsx` обновлен: добавлен `sizes`, снят `priority`;
+  - `src/app/page.tsx` обновлен: hero-image получил `sizes`, product-card убран с eager-загрузки;
+  - на сервер точечно выкачены обновленные файлы и новые `.webp`, после чего выполнены `docker compose build app` и `docker compose up -d app`;
+- `2026-05-25` проведен разбор Вебвизора:
+  - `madcore.site` без referer Метрики отдает `X-Frame-Options: SAMEORIGIN`;
+  - `madcore.site` с referer Метрики открывается без `X-Frame-Options`;
+  - значит блокировка iframe уже не является основной причиной проблемных replay;
+  - наиболее вероятная причина деградации части старых replay: отсутствие сохранения старых `/_next/static/*` после rebuild app-контейнера;
+- `2026-05-25` выполнена правка metadata title на production:
+  - перед заменой создан backup `/opt/madcore-gena/.backup/20260525-141309-metadata-title-fix`;
+  - в `src/config/site.ts` `siteTitle` изменен на `MADCORE 2.0 - консультация и заказ`;
+  - на сервер точечно выкачен только `src/config/site.ts`, после чего выполнены `docker compose build app` и `docker compose up -d app`;
 - `.env.example` и `.env.preview.example` расширены новыми переменными `TELEGRAM_CHAT_URL` и `MAX_CHAT_URL`;
 - `2026-05-24` на сервер точечно выкачены только файлы hero CTA:
   - `src/components/CtaButtons.tsx`
@@ -235,6 +262,24 @@
   - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
   - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
   - live CSS `/_next/static/css/867178918cbefdda.css` содержит мобильные правила для компактного ряда кнопок чатов;
+- после performance review `2026-05-25` подтверждены:
+  - `npm run lint`;
+  - `npm run build`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site`;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site`;
+  - `madcore_gena_app` после пересборки снова `healthy`;
+  - home HTML ускорился по `curl`: примерно `0.55s -> 0.42s` по `time_starttransfer`;
+  - Lighthouse performance улучшился примерно `0.60 -> 0.83`;
+  - LCP улучшился примерно `4.9s -> 2.7s`;
+  - `interactive` улучшился примерно `24.4s -> 5.0s`;
+  - суммарный сетевой вес страницы в Lighthouse снизился примерно `7.38 MB -> 0.47 MB`;
+- после metadata title cleanup `2026-05-25` подтверждены:
+  - `npm run lint`;
+  - `npm run build`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site`;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site`;
+  - `madcore_gena_app` после пересборки снова `healthy`;
+  - live `https://madcore.site` уже отдает `<title>MADCORE 2.0 - консультация и заказ</title>`;
 - через живой интерфейс Метрики сохранена и открывается воронка `Главная -> отправка формы`;
 - после legacy domain retirement `2026-05-24` подтверждены:
   - `https://gena.madcore-kavkaz.ru` отдает `301` на `https://madcore.site/`;
@@ -254,6 +299,7 @@
 ## Не завершено
 
 - если в Matomo нужны встроенные session replay и тепловые карты, нужно отдельно ставить `HeatmapSessionRecording`.
+- если нужно сохранить корректный replay старых сессий Яндекс.Вебвизора после новых deploy, надо отдельно реализовать хранение и отдачу предыдущих `/_next/static/*`.
 
 ## На чем остановились
 
@@ -262,6 +308,9 @@
 - в Matomo уже есть боевые URL, visit custom dimensions и manual goals;
 - в Метрике уже есть базовая сохраненная воронка для пути `главная -> отправка формы`;
 - в production hero-блоке на мобильной версии теперь две компактные кнопки чатов стоят в одной строке без изменения остальных CTA;
+- production `https://madcore.site` после image-оптимизации стал легче и заметно быстрее по live-замерам;
+- production `https://madcore.site` уже отдает короткий title без `Северного Кавказа`;
+- для свежих Webvisor-сессий страница открывается штатно, а оставшийся риск касается именно исторических replay после rebuild;
 - соседний основной сайт `https://madcore-kavkaz.ru` после этих правок остался рабочим и не подменился;
 - ближайшее незавершенное решение теперь не про базовую аналитику, а про:
   - отдельную установку `HeatmapSessionRecording`, если нужен session replay внутри Matomo.

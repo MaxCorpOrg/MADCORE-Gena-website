@@ -128,7 +128,7 @@ body::before {
   pointer-events: none;
   background:
     linear-gradient(180deg, rgba(3, 4, 6, 0.22) 0%, rgba(3, 4, 6, 0.72) 100%),
-    url("/images/background-metallic-brushed-v1.png") center center / cover no-repeat;
+    url("/images/background-metallic-brushed-v1.webp") center center / cover no-repeat;
   opacity: 0.4;
 }
 
@@ -763,7 +763,7 @@ a {
   overflow: hidden;
   background:
     linear-gradient(180deg, rgba(10, 13, 18, 0.8), rgba(9, 11, 16, 0.92)),
-    url("/images/background-metallic-brushed-v1.png") center center / cover no-repeat;
+    url("/images/background-metallic-brushed-v1.webp") center center / cover no-repeat;
   box-shadow: var(--shadow-soft);
 }
 
@@ -1470,7 +1470,7 @@ select.field option:hover {
   body::before {
     background:
       linear-gradient(180deg, rgba(3, 4, 6, 0.18) 0%, rgba(3, 4, 6, 0.68) 100%),
-      url("/images/background-metallic-mobile-v1.png") center center / cover no-repeat;
+      url("/images/background-metallic-mobile-v1.webp") center center / cover no-repeat;
     opacity: 0.46;
   }
 
@@ -1524,7 +1524,7 @@ select.field option:hover {
   .story-shell {
     background:
       linear-gradient(180deg, rgba(10, 13, 18, 0.8), rgba(9, 11, 16, 0.92)),
-      url("/images/background-metallic-mobile-v1.png") center center / cover no-repeat;
+      url("/images/background-metallic-mobile-v1.webp") center center / cover no-repeat;
   }
 
   .story-step-card {

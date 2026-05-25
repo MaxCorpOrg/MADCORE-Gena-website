@@ -1,6 +1,6 @@
 # MADCORE Gena Deployment
 
-Обновлено: `2026-05-25` `выкладка мобильных кнопок чатов`
+Обновлено: `2026-05-25` `metadata title cleanup`
 
 ## Кратко
 
@@ -90,6 +90,28 @@
   - боевой CSS-бандл `madcore.site` уже содержит мобильные правила для:
     - компактного ряда `Перейти в чат Telegram` и `Перейти в чат Max`
     - скрытия `Открытый чат` внутри этих двух мобильных CTA;
+- `2026-05-25` выполнена точечная performance-выкладка:
+  - перед заменой создан backup `/opt/madcore-gena/.backup/20260525-140649-performance-and-webvisor-review`;
+  - на сервер точечно переданы:
+    - `next.config.ts`
+    - `src/app/page.tsx`
+    - `src/app/globals.css`
+    - `src/components/MadcoreWordmark.tsx`
+    - `public/images/background-metallic-brushed-v1.webp`
+    - `public/images/background-metallic-mobile-v1.webp`
+  - затем выполнены:
+    - `docker compose build app`
+    - `docker compose up -d app`
+  - `madcore_gena_app` после пересоздания снова перешел в `healthy`;
+  - live HTML `madcore.site` после этой правки preload-ит только hero-image, а тяжелые background-assets отдаются уже как `.webp`;
+- `2026-05-25` выполнена точечная metadata-выкладка:
+  - перед заменой создан backup `/opt/madcore-gena/.backup/20260525-141309-metadata-title-fix`;
+  - на сервер передан только `src/config/site.ts`;
+  - затем выполнены:
+    - `docker compose build app`
+    - `docker compose up -d app`
+  - `madcore_gena_app` после пересоздания снова перешел в `healthy`;
+  - live `https://madcore.site` уже отдает `<title>MADCORE 2.0 - консультация и заказ</title>`;
 - через `BotFather` создан отдельный бот `@MadcoreGenaLeadsBot`;
 - в `.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
 - `2026-05-23` добавлен второй получатель Telegram-уведомлений по профилю `@M_a_x_i_m_M_i_k_h_a_i_l_o_v` через `TELEGRAM_EXTRA_CHAT_IDS`;
@@ -157,6 +179,16 @@
     - `grid-template-columns:repeat(2,minmax(0,1fr))`
     - `display:none` для верхней подписи `cta-telegram-chat` и `cta-max-chat`
     - `font-size:.86rem` для их заголовка на мобильной версии;
+- `2026-05-25 performance review` дополнительно подтверждены:
+  - `npm run lint`;
+  - `npm run build`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site`;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site`;
+  - home HTML ускорился по `curl`: примерно `0.55s -> 0.42s` по `time_starttransfer`;
+  - Lighthouse performance улучшился примерно `0.60 -> 0.83`;
+  - LCP улучшился примерно `4.9s -> 2.7s`;
+  - `interactive` улучшился примерно `24.4s -> 5.0s`;
+  - суммарный сетевой вес страницы в Lighthouse снизился примерно `7.38 MB -> 0.47 MB`;
 
 ## Что заполнять в `/opt/madcore-gena/.env`
 
@@ -243,6 +275,11 @@ curl -Iks -e https://metrika.yandex.ru/ https://madcore.site
 - без referer Метрики сайт отдает `X-Frame-Options: SAMEORIGIN`;
 - с referer Метрики заголовок снимается, чтобы Вебвизор мог открыть страницу.
 
+Важно:
+
+- это снимает текущую iframe-блокировку, но не решает проблему исторических replay после deploy;
+- наиболее вероятный оставшийся риск Вебвизора: старые hashed-файлы `/_next/static/*` не сохраняются между сборками, поэтому старые записи после rebuild могут открываться без прежнего CSS/JS.
+
 Проверка общего ingress:
 
 ```bash
@@ -255,3 +292,4 @@ docker exec madcore_nginx nginx -s reload
 
 1. Если в Matomo нужны session replay и тепловые карты внутри самой Matomo, отдельно решить установку `HeatmapSessionRecording`.
 2. Если receiving-chat будет меняться, обновить `TELEGRAM_CHAT_ID` и повторно проверить live lead notify.
+3. Если нужно, чтобы старые replay Яндекс.Вебвизора переживали новые deploy, отдельно внедрить хранение и отдачу прошлых `/_next/static/*` из persistent storage или через fallback ingress-слой.

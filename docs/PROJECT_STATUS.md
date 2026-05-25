@@ -1,6 +1,6 @@
 # MADCORE Gena Project Status
 
-Обновлено: `2026-05-25` `выкладка мобильных кнопок чатов`
+Обновлено: `2026-05-25` `metadata title cleanup`
 
 ## Контрольная точка
 
@@ -136,6 +136,32 @@
   - на сервер точечно передан только `src/app/globals.css`;
   - `madcore_gena_app` пересобран через `docker compose build app` и пересоздан через `docker compose up -d app`;
   - после выкладки боевой CSS-бандл уже содержит мобильные правила для компактного ряда `Перейти в чат Telegram` и `Перейти в чат Max`;
+- `2026-05-25` проведен production performance review и выкачена image-оптимизация:
+  - перед заменой создана резервная копия `/opt/madcore-gena/.backup/20260525-140649-performance-and-webvisor-review`;
+  - в `next.config.ts` убран `images.unoptimized`, чтобы `next/image` снова отдавал оптимизированные форматы;
+  - тяжелые фоны `background-metallic-brushed-v1.png` и `background-metallic-mobile-v1.png` переведены на более легкие `.webp`;
+  - у `MadcoreWordmark` добавлен `sizes`, а ненужный `priority` снят;
+  - карточка продукта переведена с eager-загрузки на штатную lazy-загрузку, hero-image оставлен единственным `priority`-asset;
+  - на сервер точечно переданы:
+    - `next.config.ts`
+    - `src/app/page.tsx`
+    - `src/app/globals.css`
+    - `src/components/MadcoreWordmark.tsx`
+    - `public/images/background-metallic-brushed-v1.webp`
+    - `public/images/background-metallic-mobile-v1.webp`
+  - после выкладки live HTML `https://madcore.site` preload-ит только hero-image, а logo и product-card больше не тянут раннюю загрузку;
+- `2026-05-25` разбор Яндекс.Вебвизора показал:
+  - для свежих live-открытий `madcore.site` отдает нормальный HTML, CSS и изображения;
+  - `X-Frame-Options` для referer Яндекс.Метрики уже снимается на уровне общего ingress, значит текущая проблема не в iframe-блокировке;
+  - наиболее вероятная причина "сломанного" вида у части replay-сессий после выкладок: исторические hashed-файлы `/_next/static/*` не сохраняются между deploy, а новый контейнер хранит только ассеты текущей сборки;
+  - из-за этого старые записи Вебвизора после очередного деплоя могут открываться без прежнего CSS/JS и выглядеть как "сайт без картинок и оформления";
+- `2026-05-25` исправлен production title для поиска:
+  - источник проблемы найден в `src/config/site.ts`, где `siteTitle` был задан как `MADCORE 2.0 - консультация и заказ на Северном Кавказе`;
+  - `siteTitle` сокращен до `MADCORE 2.0 - консультация и заказ`;
+  - перед заменой создана резервная копия `/opt/madcore-gena/.backup/20260525-141309-metadata-title-fix`;
+  - на сервер точечно передан только `src/config/site.ts`;
+  - затем выполнены `docker compose build app` и `docker compose up -d app`;
+  - live `https://madcore.site` уже отдает новый `<title>` без фразы `на Северном Кавказе`;
 - `2026-05-24` доведен контур аналитики production-сайта:
   - счетчик Яндекс.Метрики `109282367` переименован в `MADCORE Gena` и переведен на `madcore.site`;
   - на стороне счетчика включены `webvisor`, `clickmap`, архивирование Вебвизора и `measurement_enabled`;
@@ -260,6 +286,25 @@
     - двухколоночную мобильную сетку для `cta-grid--with-chat-links`
     - `display:none` для верхней подписи у `cta-telegram-chat` и `cta-max-chat`
     - уменьшенный `font-size` для заголовка этих двух кнопок;
+- после performance review `2026-05-25` дополнительно подтверждены:
+  - `npm run lint` проходит;
+  - `npm run build` проходит;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - `madcore_gena_app` после пересборки имеет статус `healthy`;
+  - home HTML ускорился по `curl`: примерно `0.55s -> 0.42s` по `time_starttransfer`;
+  - Lighthouse performance улучшился примерно `0.60 -> 0.83`;
+  - LCP улучшился примерно `4.9s -> 2.7s`;
+  - `interactive` улучшился примерно `24.4s -> 5.0s`;
+  - суммарный сетевой вес страницы в Lighthouse снизился примерно `7.38 MB -> 0.47 MB`;
+  - Яндекс.Метрика и Matomo все еще дают заметную нагрузку на main thread, но теперь это вторичный фактор по сравнению с исходными PNG и отключенной image-оптимизацией;
+- после metadata title cleanup `2026-05-25` дополнительно подтверждены:
+  - `npm run lint` проходит;
+  - `npm run build` проходит;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - `madcore_gena_app` после пересборки имеет статус `healthy`;
+  - live HTML `https://madcore.site` уже отдает `<title>MADCORE 2.0 - консультация и заказ</title>`;
 - через живой интерфейс Метрики сохранена воронка `Главная -> отправка формы`;
 - после legacy domain retirement `2026-05-24` дополнительно подтверждены:
   - `https://gena.madcore-kavkaz.ru` отдает `301` на `https://madcore.site/`;
@@ -280,6 +325,7 @@
 ## Что осталось
 
 - если в Matomo нужны встроенные session replay и тепловые карты, нужно отдельно ставить плагин `HeatmapSessionRecording`.
+- если нужно, чтобы старые replay-сессии Яндекс.Вебвизора после новых deploy продолжали открываться с корректным CSS/JS, надо отдельно продумать хранение и отдачу предыдущих hashed-файлов `/_next/static/*`.
 
 ## На чем остановились
 
@@ -295,6 +341,9 @@
 - кодовая база, отдельный runtime, DNS, SSL, Matomo, Метрика и Telegram bot-flow уже разведены;
 - новый hero CTA-вариант с двумя отдельными chat-кнопками Telegram и Max уже выкачен на `https://madcore.site`;
 - на production `https://madcore.site` мобильная версия уже отдает две компактные кнопки открытых чатов в одном ряду, а остальные кнопки hero не менялись;
+- production `https://madcore.site` после image-оптимизации стал заметно легче и быстрее грузится на реальных проверках;
+- production `https://madcore.site` уже отдает короткий title `MADCORE 2.0 - консультация и заказ`, а упоминание `Северного Кавказа` убрано из текущих metadata;
+- Вебвизор для свежих сессий уже может открыть страницу штатно, но у исторических replay после деплоев остается инфраструктурный риск потери старых `/_next/static/*`;
 - production-аналитика уже доведена:
   - Метрика работает на `madcore.site` с Вебвизором и картами;
   - Matomo работает на `site id = 2` с боевыми URL, custom dimensions и manual goals;
