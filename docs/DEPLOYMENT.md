@@ -1,6 +1,6 @@
 # MADCORE Gena Deployment
 
-Обновлено: `2026-05-24` `analytics hardening`
+Обновлено: `2026-05-25` `выкладка мобильных кнопок чатов`
 
 ## Кратко
 
@@ -80,6 +80,16 @@
   - live `https://madcore.site` начал отдавать CTA:
     - `Перейти в чат Telegram`
     - `Перейти в чат Max`
+- `2026-05-25` live-правка мобильного ряда chat CTA выполнена точечно:
+  - перед заменой создан backup `/opt/madcore-gena/.backup/20260525-132139-mobile-chat-cta-row`;
+  - на сервер передан только `src/app/globals.css`;
+  - затем выполнены:
+    - `docker compose build app`
+    - `docker compose up -d app`
+  - `madcore_gena_app` после пересоздания снова перешел в `healthy`;
+  - боевой CSS-бандл `madcore.site` уже содержит мобильные правила для:
+    - компактного ряда `Перейти в чат Telegram` и `Перейти в чат Max`
+    - скрытия `Открытый чат` внутри этих двух мобильных CTA;
 - через `BotFather` создан отдельный бот `@MadcoreGenaLeadsBot`;
 - в `.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
 - `2026-05-23` добавлен второй получатель Telegram-уведомлений по профилю `@M_a_x_i_m_M_i_k_h_a_i_l_o_v` через `TELEGRAM_EXTRA_CHAT_IDS`;
@@ -139,6 +149,14 @@
   - project defaults внутри `/home/max/MADCORE RF` переведены на `madcore.site`;
   - `gena.madcore-kavkaz.ru` и `www.gena.madcore-kavkaz.ru` в общем ingress отдают `301` на `https://madcore.site`;
   - из Matomo `site id = 2` удалены legacy URL старого домена.
+- `2026-05-25 mobile chat CTA live deploy` дополнительно подтверждены:
+  - `docker inspect` для `madcore_gena_app` вернул `healthy`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - live CSS `/_next/static/css/867178918cbefdda.css` содержит:
+    - `grid-template-columns:repeat(2,minmax(0,1fr))`
+    - `display:none` для верхней подписи `cta-telegram-chat` и `cta-max-chat`
+    - `font-size:.86rem` для их заголовка на мобильной версии;
 
 ## Что заполнять в `/opt/madcore-gena/.env`
 

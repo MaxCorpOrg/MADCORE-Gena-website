@@ -1,6 +1,6 @@
 # MADCORE Gena Project Status
 
-Обновлено: `2026-05-24` `analytics hardening + metrika funnel`
+Обновлено: `2026-05-25` `выкладка мобильных кнопок чатов`
 
 ## Контрольная точка
 
@@ -126,6 +126,16 @@
   - перед заменой создана резервная копия в `/opt/madcore-gena/.backup/20260524-122052`;
   - `madcore_gena_app` пересобран через `docker compose build app` и пересоздан через `docker compose up -d app`;
   - live HTML уже отдает `Перейти в чат Telegram` и `Перейти в чат Max` в hero-блоке;
+- `2026-05-25` локально уточнена мобильная раскладка hero-кнопок чатов:
+  - на экранах до `639px` кнопки `Перейти в чат Telegram` и `Перейти в чат Max` стоят в одной строке;
+  - обе кнопки сделаны компактнее по высоте и ширине;
+  - для этих двух кнопок скрыт верхний kicker `Открытый чат`, чтобы они не раздувались по высоте;
+  - остальные CTA-кнопки не менялись;
+- `2026-05-25` мобильная правка кнопок чатов выкачена на live `https://madcore.site`:
+  - перед заменой создана резервная копия `/opt/madcore-gena/.backup/20260525-132139-mobile-chat-cta-row`;
+  - на сервер точечно передан только `src/app/globals.css`;
+  - `madcore_gena_app` пересобран через `docker compose build app` и пересоздан через `docker compose up -d app`;
+  - после выкладки боевой CSS-бандл уже содержит мобильные правила для компактного ряда `Перейти в чат Telegram` и `Перейти в чат Max`;
 - `2026-05-24` доведен контур аналитики production-сайта:
   - счетчик Яндекс.Метрики `109282367` переименован в `MADCORE Gena` и переведен на `madcore.site`;
   - на стороне счетчика включены `webvisor`, `clickmap`, архивирование Вебвизора и `measurement_enabled`;
@@ -239,6 +249,17 @@
   - `https://madcore.site` для обычного запроса отдает `X-Frame-Options: SAMEORIGIN`;
   - `https://madcore.site` для referer Яндекс.Метрики отдает страницу без `X-Frame-Options`, чтобы Вебвизор мог открывать сайт;
   - в контейнере `madcore_gena_app` подтверждено наличие `__madcoreMatomoGoals` и client-side вызова `trackGoal`;
+- после мобильной правки кнопок чатов `2026-05-25` локально подтверждены:
+  - `npm run lint`
+  - `npm run build`
+- после live-выкладки мобильных кнопок чатов `2026-05-25` дополнительно подтверждены:
+  - `madcore_gena_app` на сервере имеет статус `healthy`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - live CSS `/_next/static/css/867178918cbefdda.css` содержит:
+    - двухколоночную мобильную сетку для `cta-grid--with-chat-links`
+    - `display:none` для верхней подписи у `cta-telegram-chat` и `cta-max-chat`
+    - уменьшенный `font-size` для заголовка этих двух кнопок;
 - через живой интерфейс Метрики сохранена воронка `Главная -> отправка формы`;
 - после legacy domain retirement `2026-05-24` дополнительно подтверждены:
   - `https://gena.madcore-kavkaz.ru` отдает `301` на `https://madcore.site/`;
@@ -273,6 +294,7 @@
   - `madcore.site`
 - кодовая база, отдельный runtime, DNS, SSL, Matomo, Метрика и Telegram bot-flow уже разведены;
 - новый hero CTA-вариант с двумя отдельными chat-кнопками Telegram и Max уже выкачен на `https://madcore.site`;
+- на production `https://madcore.site` мобильная версия уже отдает две компактные кнопки открытых чатов в одном ряду, а остальные кнопки hero не менялись;
 - production-аналитика уже доведена:
   - Метрика работает на `madcore.site` с Вебвизором и картами;
   - Matomo работает на `site id = 2` с боевыми URL, custom dimensions и manual goals;

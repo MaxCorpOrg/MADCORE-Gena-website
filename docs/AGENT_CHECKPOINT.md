@@ -15,7 +15,8 @@
     - `Перейти в чат Telegram`
     - `Перейти в чат Max`
   - мобильный порядок CTA зафиксирован как:
-    - `WhatsApp -> Telegram -> MaX -> чат Telegram -> чат Max -> звонок`;
+    - `WhatsApp -> Telegram -> MaX -> [чат Telegram | чат Max] -> звонок`;
+  - на production мобильная версия уже отдает эти две кнопки открытых чатов в одном компактном ряду;
 - на сервере уже есть отдельная точка развёртывания `/opt/madcore-gena`;
 - в Метрике уже существует отдельный счетчик `109282367`;
 - `2026-05-24` счетчик Метрики уже переведен на production-host `madcore.site`, а на стороне счетчика включены Вебвизор, карта кликов и measurement;
@@ -37,6 +38,11 @@
   - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
   - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
   - `https://madcore-kavkaz.ru` остался отдельным и не подменился.
+- `2026-05-25` live-выкладка мобильного ряда кнопок чатов подтверждена:
+  - резервная копия перед заменой создана в `/opt/madcore-gena/.backup/20260525-132139-mobile-chat-cta-row`;
+  - на сервер передавался только `src/app/globals.css`;
+  - `madcore_gena_app` после пересборки имеет статус `healthy`;
+  - боевые smoke-проверки на `https://madcore.site` снова проходят;
 
 ## Ключевые незавершенные задачи
 
