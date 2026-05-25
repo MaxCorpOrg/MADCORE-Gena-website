@@ -1,6 +1,6 @@
 # MADCORE Gena Project Checkpoint
 
-Обновлено: `2026-05-25` `metadata title cleanup`
+Обновлено: `2026-05-25` `seo-hardening branch prepared`
 
 ## Проект
 
@@ -16,6 +16,11 @@
 
 ## Текущее состояние
 
+- для SEO-работ создано отдельное дерево:
+  - локальная ветка `seo-hardening`;
+  - remote-ветка `origin/seo-hardening`;
+  - отдельный `worktree` `/home/max/MADCORE RF SEO`;
+- рабочий `main` перед этим синхронизирован с live и отправлен в `origin/main`, поэтому SEO-эксперименты теперь не затрагивают production-ветку;
 - новый проект полностью отделен от исходного сайта на уровне кода;
 - основной сайт `/home/max/MADCORE` и его production-маршрут оставлены рабочими;
 - metallic-версия без гор развернута и публично доступна на production-домене `madcore.site`;
@@ -55,6 +60,12 @@
 - production metadata уже уточнены:
   - `siteTitle` сокращен с `MADCORE 2.0 - консультация и заказ на Северном Кавказе` до `MADCORE 2.0 - консультация и заказ`;
   - live `madcore.site` уже отдает короткий `<title>` без региональной приписки;
+- в отдельной ветке `seo-hardening` уже подготовлен безопасный технический SEO-пакет:
+  - `canonical` для `/`;
+  - `canonical` для `/privacy`;
+  - `JSON-LD` со схемами `WebSite` и `Organization`;
+  - явный `openGraph.url`;
+  - этот пакет пока проверен только локально и еще не выкачивался на production;
 - перед live-заменой CTA-файлов на сервере создана резервная копия:
   - `/opt/madcore-gena/.backup/20260524-122052`;
 - проектный `madcore_gena_nginx` в коде остается подготовленным, но в текущем production TLS и host-routing обслуживаются общим `madcore_nginx`.
@@ -185,6 +196,13 @@
 
 ## Что проверено
 
+- для ветки `seo-hardening` локально подтверждены:
+  - `npm run lint`;
+  - `npm run build`;
+  - локальный `next start` на `http://localhost:3010`;
+  - в локальном HTML уже отдаются:
+    - `<link rel="canonical" href="https://madcore.site"/>`
+    - `<script type="application/ld+json">...`;
 - `npm run lint` проходит;
 - `npm run build` проходит;
 - `bash ./scripts/repo-adtech-audit.sh` проходит;
@@ -311,6 +329,8 @@
 - production `https://madcore.site` после image-оптимизации стал легче и заметно быстрее по live-замерам;
 - production `https://madcore.site` уже отдает короткий title без `Северного Кавказа`;
 - для свежих Webvisor-сессий страница открывается штатно, а оставшийся риск касается именно исторических replay после rebuild;
+- SEO-доработка вынесена в отдельную ветку `seo-hardening`, где уже готов безопасный пакет `canonical + JSON-LD`;
+- этот SEO-пакет пока не на production и ждет отдельного решения о merge/выкладке;
 - соседний основной сайт `https://madcore-kavkaz.ru` после этих правок остался рабочим и не подменился;
 - ближайшее незавершенное решение теперь не про базовую аналитику, а про:
   - отдельную установку `HeatmapSessionRecording`, если нужен session replay внутри Matomo.

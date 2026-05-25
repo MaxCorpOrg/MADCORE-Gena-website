@@ -7,6 +7,9 @@ import TrackClient from "@/components/TrackClient";
 import { getSiteRuntimeConfig, siteContent } from "@/config/site";
 
 export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
   robots: {
     index: true,
     follow: true,

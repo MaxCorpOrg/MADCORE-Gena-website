@@ -5,7 +5,34 @@ import Matomo from "@/components/Matomo";
 import YandexMetrika from "@/components/YandexMetrika";
 import { getSiteRuntimeConfig, siteContent } from "@/config/site";
 
-const { publicBaseUrl } = getSiteRuntimeConfig();
+const { publicBaseUrl, publicPhone } = getSiteRuntimeConfig();
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: siteContent.productName,
+      url: publicBaseUrl,
+      inLanguage: "ru-RU",
+    },
+    {
+      "@type": "Organization",
+      name: siteContent.productName,
+      url: publicBaseUrl,
+      logo: `${publicBaseUrl}/icon.png`,
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          telephone: publicPhone,
+          contactType: "sales",
+          areaServed: "RU",
+          availableLanguage: ["ru"],
+        },
+      ],
+    },
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(publicBaseUrl),
@@ -14,6 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteContent.productName,
     description: siteContent.ogDescription,
+    url: publicBaseUrl,
     images: [siteContent.heroImagePath],
     type: "website",
     locale: "ru_RU",
@@ -29,6 +57,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ru">
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <Matomo
           matomoUrl={matomoUrl}
           siteId={matomoSiteId}

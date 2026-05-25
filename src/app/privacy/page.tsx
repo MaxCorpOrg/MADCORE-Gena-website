@@ -4,6 +4,9 @@ import { siteContent } from "@/config/site";
 
 export const metadata: Metadata = {
   title: siteContent.privacyTitle,
+  alternates: {
+    canonical: "/privacy",
+  },
   robots: {
     index: true,
     follow: true,
