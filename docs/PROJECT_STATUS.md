@@ -1,6 +1,6 @@
 # MADCORE Gena Project Status
 
-Обновлено: `2026-05-25` `metadata title cleanup`
+Обновлено: `2026-05-30` `live ready gena image deploy`
 
 ## Контрольная точка
 
@@ -70,6 +70,43 @@
   - `Мы являемся официальным представителем MADCORE 2.0`
 - display-label проекта в hero-chip переведен на `madcore.site`, при этом live preview по-прежнему доступен на `gena.madcore-kavkaz.ru`;
 - hero и product-карточка переведены на новый premium metallic visual без гор и без изменения структуры страницы;
+- `2026-05-28` локально обновлены первое и второе изображения главной страницы:
+  - `public/images/hero-metallic-premium-v1.png` заменен на новый исходник для совместимого `og:image`;
+  - `public/images/product-metallic-card-v2.png` заменен на новый исходник;
+  - для клиентской выдачи добавлены и подключены `public/images/hero-metallic-premium-v1.avif` и `public/images/product-metallic-card-v2.avif`;
+  - вес hero-ассета на странице снижен примерно `2098056 -> 61516` байт;
+- `2026-05-28` первое изображение затем обновлено еще раз новым файлом `1.png`:
+  - `public/images/hero-metallic-premium-v1.png` снова синхронизирован с самым свежим локальным исходником;
+  - для hero-image локально сравнивались `AVIF` уровни качества `45`, `50`, `55` и `60`;
+  - в работу оставлен `quality=50` как компромисс между визуалом и весом;
+  - итоговый вес hero-ассета на странице снижен примерно `1963178 -> 45969` байт;
+- `2026-05-28` второе изображение затем скорректировано повторной заменой из обновленного исходника `2.png`:
+  - `public/images/product-metallic-card-v2.png` перевыпущен из правильного файла;
+  - `public/images/product-metallic-card-v2.avif` пересобран заново из этого же исходника;
+  - итоговый вес product-ассета на странице снижен примерно `2138425 -> 65189` байт;
+- `2026-05-28` второе изображение затем заменено еще раз на более свежий файл `2.png`:
+  - `public/images/product-metallic-card-v2.png` снова синхронизирован с локальным исходником;
+  - `public/images/product-metallic-card-v2.avif` перевыпущен из нового файла с более бережным качеством для читаемости текста и линий;
+  - итоговый вес product-ассета на странице снижен примерно `2595110 -> 118523` байт;
+- `2026-05-28` второе изображение затем обновлено еще раз новым файлом `2.png`:
+  - `public/images/product-metallic-card-v2.png` снова синхронизирован с самым свежим локальным исходником;
+  - `public/images/product-metallic-card-v2.avif` перевыпущен заново из этого файла;
+  - итоговый вес product-ассета на странице снижен примерно `2800398 -> 123892` байт;
+- `2026-05-28` локальная image-правка hero/product затем выкачена на live `https://madcore.site`:
+  - перед заменой создан backup `/opt/madcore-gena/.backup/20260528-115831-hero-product-image-refresh`;
+  - на сервер точечно переданы `src/app/layout.tsx`, `src/app/page.tsx`, `src/config/site.ts`, `public/images/hero-metallic-premium-v1.png`, `public/images/hero-metallic-premium-v1.avif`, `public/images/product-metallic-card-v2.png`, `public/images/product-metallic-card-v2.avif`;
+  - после синхронизации выполнены `docker compose build app` и `docker compose up -d app`;
+- `2026-05-30` локально подготовлена еще одна замена двух главных изображений из папки `Готовый Гена`:
+  - hero-изображение перевыпущено из `/home/max/Рабочий стол/Заменить изображение на картинке/2/Готовый Гена/1Г.png`;
+  - product-card перевыпущен из `/home/max/Рабочий стол/Заменить изображение на картинке/2/Готовый Гена/2Г.png`;
+  - `public/images/hero-metallic-premium-v1.avif` собран с `quality=44` и имеет размер `57826` байт;
+  - `public/images/product-metallic-card-v2.png` дополнительно уменьшен по геометрии `1254x1254 -> 1024x1024`;
+  - `public/images/product-metallic-card-v2.avif` собран после ресайза с `quality=54` и имеет размер `51238` байт;
+  - `src/app/page.tsx` синхронизирован с фактическими размерами новых файлов `1024x1536` и `1024x1024`;
+- `2026-05-30` этот набор `1Г/2Г` затем выкачен на live `https://madcore.site`:
+  - перед заменой создан backup `/opt/madcore-gena/.backup/20260530-131905-ready-gena-image-refresh`;
+  - на сервер точечно переданы `src/app/layout.tsx`, `src/app/page.tsx`, `src/config/site.ts`, `public/images/hero-metallic-premium-v1.png`, `public/images/hero-metallic-premium-v1.avif`, `public/images/product-metallic-card-v2.png`, `public/images/product-metallic-card-v2.avif`;
+  - после синхронизации выполнены `docker compose build app` и `docker compose up -d app`;
 - favicon, `icon.png` и `apple-icon.png` заменены на новый металлический знак;
 - активная документация нового проекта отделена от legacy-контекста, архив исходных материалов вынесен в `docs/archive-origin/`;
 - добавлен отдельный preview-шаблон окружения `.env.preview.example`;
@@ -305,6 +342,55 @@
   - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
   - `madcore_gena_app` после пересборки имеет статус `healthy`;
   - live HTML `https://madcore.site` уже отдает `<title>MADCORE 2.0 - консультация и заказ</title>`;
+- после local home image refresh `2026-05-28` дополнительно подтверждены:
+  - `npm run lint` проходит;
+  - `npm run build` проходит;
+  - hero-блок использует `/images/hero-metallic-premium-v1.avif`, а совместимый `og:image` сохранен на `/images/hero-metallic-premium-v1.png`;
+  - product-card использует `/images/product-metallic-card-v2.avif`;
+- после hero image correction `2026-05-28` дополнительно подтверждены:
+  - `npm run lint` проходит;
+  - `npm run build` проходит;
+  - `public/images/hero-metallic-premium-v1.png` совпадает с самым свежим локальным исходником `/home/max/Рабочий стол/Заменить изображение на картинке/2/1.png`;
+  - `public/images/hero-metallic-premium-v1.avif` перевыпущен с `quality=50` и имеет размер `45969` байт;
+- после product card image correction `2026-05-28` дополнительно подтверждены:
+  - `npm run lint` проходит;
+  - `npm run build` проходит;
+  - `public/images/product-metallic-card-v2.png` теперь совпадает с обновленным локальным исходником `/home/max/Рабочий стол/Заменить изображение на картинке/2/2.png`;
+  - `public/images/product-metallic-card-v2.avif` перевыпущен из правильного исходника и имеет размер `65189` байт;
+- после product card image correction round 2 `2026-05-28` дополнительно подтверждены:
+  - `npm run lint` проходит;
+  - `npm run build` проходит;
+  - `public/images/product-metallic-card-v2.png` совпадает с самым свежим локальным исходником `/home/max/Рабочий стол/Заменить изображение на картинке/2/2.png`;
+  - `public/images/product-metallic-card-v2.avif` перевыпущен заново и имеет размер `118523` байт;
+- после product card image correction round 3 `2026-05-28` дополнительно подтверждены:
+  - `npm run lint` проходит;
+  - `npm run build` проходит;
+  - `public/images/product-metallic-card-v2.png` совпадает с самым свежим локальным исходником `/home/max/Рабочий стол/Заменить изображение на картинке/2/2.png`;
+  - `public/images/product-metallic-card-v2.avif` перевыпущен заново и имеет размер `123892` байт;
+- после live hero + product image deploy `2026-05-28` дополнительно подтверждены:
+  - `madcore_gena_app` после пересборки имеет статус `healthy`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - live HTML `https://madcore.site` preload-ит `hero-metallic-premium-v1.avif`;
+  - live HTML `https://madcore.site` отдает `og:image` и `twitter:image` на `https://madcore.site/images/hero-metallic-premium-v1.png`;
+  - live product-card использует `/images/product-metallic-card-v2.avif`;
+  - live `https://madcore.site/images/hero-metallic-premium-v1.avif` отвечает `200` с `content-length: 45969`;
+  - live `https://madcore.site/images/product-metallic-card-v2.avif` отвечает `200` с `content-length: 123892`;
+- после ready gena image refresh `2026-05-30` дополнительно подтверждены:
+  - `npm run lint` проходит;
+  - `npm run build` проходит;
+  - `public/images/hero-metallic-premium-v1.png` совпадает с локальным исходником `/home/max/Рабочий стол/Заменить изображение на картинке/2/Готовый Гена/1Г.png`;
+  - `public/images/hero-metallic-premium-v1.avif` перевыпущен с `quality=44` и имеет размер `57826` байт;
+  - `public/images/product-metallic-card-v2.png` перевыпущен из `/home/max/Рабочий стол/Заменить изображение на картинке/2/Готовый Гена/2Г.png` с ресайзом до `1024x1024`;
+  - `public/images/product-metallic-card-v2.avif` перевыпущен после ресайза с `quality=54` и имеет размер `51238` байт;
+- после live ready gena image deploy `2026-05-30` дополнительно подтверждены:
+  - `madcore_gena_app` после пересборки имеет статус `healthy`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - live HTML `https://madcore.site` использует `hero-metallic-premium-v1.avif` и `product-metallic-card-v2.avif`;
+  - live metadata сохраняют `hero-metallic-premium-v1.png` как `og:image` и `twitter:image`;
+  - live `https://madcore.site/images/hero-metallic-premium-v1.avif` отвечает `200` с `content-length: 57826`;
+  - live `https://madcore.site/images/product-metallic-card-v2.avif` отвечает `200` с `content-length: 51238`;
 - через живой интерфейс Метрики сохранена воронка `Главная -> отправка формы`;
 - после legacy domain retirement `2026-05-24` дополнительно подтверждены:
   - `https://gena.madcore-kavkaz.ru` отдает `301` на `https://madcore.site/`;
@@ -343,6 +429,10 @@
 - на production `https://madcore.site` мобильная версия уже отдает две компактные кнопки открытых чатов в одном ряду, а остальные кнопки hero не менялись;
 - production `https://madcore.site` после image-оптимизации стал заметно легче и быстрее грузится на реальных проверках;
 - production `https://madcore.site` уже отдает короткий title `MADCORE 2.0 - консультация и заказ`, а упоминание `Северного Кавказа` убрано из текущих metadata;
+- текущая live-версия `https://madcore.site` уже переведена на самый свежий набор `1Г/2Г`:
+  - hero идет через `AVIF quality=44`;
+  - product-card идет через `AVIF` после ресайза до `1024x1024`;
+  - совместимый `og:image` сохранен на `PNG`;
 - Вебвизор для свежих сессий уже может открыть страницу штатно, но у исторических replay после деплоев остается инфраструктурный риск потери старых `/_next/static/*`;
 - production-аналитика уже доведена:
   - Метрика работает на `madcore.site` с Вебвизором и картами;

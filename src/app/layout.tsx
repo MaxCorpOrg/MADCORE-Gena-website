@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteContent.productName,
     description: siteContent.ogDescription,
-    images: [siteContent.heroImagePath],
+    images: [siteContent.socialImagePath],
     type: "website",
     locale: "ru_RU",
   },

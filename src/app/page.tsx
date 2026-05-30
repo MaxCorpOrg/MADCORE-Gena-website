@@ -105,8 +105,8 @@ export default function HomePage() {
                 <Image
                   src={siteContent.heroImagePath}
                   alt="Премиальная металлическая иллюстрация продукта MADCORE 2.0"
-                  width={1100}
-                  height={1400}
+                  width={1024}
+                  height={1536}
                   priority
                   sizes="(min-width: 1024px) 44vw, 100vw"
                   className="hero-image"
@@ -176,10 +176,10 @@ export default function HomePage() {
                 </div>
                 <div className="product-media-frame relative overflow-hidden rounded-2xl border border-[#2A2A2A] bg-[#0c0c0c]">
                   <Image
-                    src="/images/product-metallic-card-v2.png"
+                    src="/images/product-metallic-card-v2.avif"
                     alt="Премиальная металлическая карточка продукта MADCORE 2.0"
-                    width={1254}
-                    height={1254}
+                    width={1024}
+                    height={1024}
                     sizes="(min-width: 1024px) 34vw, 90vw"
                     className="product-card-image"
                   />

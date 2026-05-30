@@ -4,7 +4,8 @@ export const siteContent = {
   productName: "MADCORE 2.0",
   siteDomain: DEFAULT_SITE_DOMAIN,
   displayDomainLabel: "madcore.site",
-  heroImagePath: "/images/hero-metallic-premium-v1.png",
+  heroImagePath: "/images/hero-metallic-premium-v1.avif",
+  socialImagePath: "/images/hero-metallic-premium-v1.png",
   siteTitle: "MADCORE 2.0 - консультация и заказ",
   siteDescription:
     "MADCORE 2.0. Консультация, актуальная информация по продукту и заказ через Telegram или WhatsApp.",

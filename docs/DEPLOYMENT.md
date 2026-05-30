@@ -1,6 +1,6 @@
 # MADCORE Gena Deployment
 
-Обновлено: `2026-05-25` `metadata title cleanup`
+Обновлено: `2026-05-30` `live ready gena image deploy`
 
 ## Кратко
 
@@ -112,6 +112,40 @@
     - `docker compose up -d app`
   - `madcore_gena_app` после пересоздания снова перешел в `healthy`;
   - live `https://madcore.site` уже отдает `<title>MADCORE 2.0 - консультация и заказ</title>`;
+- `2026-05-28` выполнена точечная live-выкладка обновленных hero/product изображений:
+  - перед заменой создан backup `/opt/madcore-gena/.backup/20260528-115831-hero-product-image-refresh`;
+  - на сервер точечно переданы:
+    - `src/app/layout.tsx`
+    - `src/app/page.tsx`
+    - `src/config/site.ts`
+    - `public/images/hero-metallic-premium-v1.png`
+    - `public/images/hero-metallic-premium-v1.avif`
+    - `public/images/product-metallic-card-v2.png`
+    - `public/images/product-metallic-card-v2.avif`
+  - затем выполнены:
+    - `docker compose build app`
+    - `docker compose up -d app`
+  - `madcore_gena_app` после пересоздания снова перешел в `healthy`;
+  - live `https://madcore.site` preload-ит `hero-metallic-premium-v1.avif`;
+  - live `https://madcore.site` держит `og:image` и `twitter:image` на `hero-metallic-premium-v1.png`;
+  - live product-card использует `product-metallic-card-v2.avif`;
+- `2026-05-30` выполнена точечная live-выкладка самого свежего набора `1Г/2Г`:
+  - перед заменой создан backup `/opt/madcore-gena/.backup/20260530-131905-ready-gena-image-refresh`;
+  - на сервер точечно переданы:
+    - `src/app/layout.tsx`
+    - `src/app/page.tsx`
+    - `src/config/site.ts`
+    - `public/images/hero-metallic-premium-v1.png`
+    - `public/images/hero-metallic-premium-v1.avif`
+    - `public/images/product-metallic-card-v2.png`
+    - `public/images/product-metallic-card-v2.avif`
+  - затем выполнены:
+    - `docker compose build app`
+    - `docker compose up -d app`
+  - `madcore_gena_app` после пересоздания снова перешел в `healthy`;
+  - live `https://madcore.site` использует `hero-metallic-premium-v1.avif` с `quality=44`;
+  - live product-card использует `product-metallic-card-v2.avif` после ресайза исходника до `1024x1024`;
+  - live metadata сохраняют `hero-metallic-premium-v1.png` как `og:image` и `twitter:image`;
 - через `BotFather` создан отдельный бот `@MadcoreGenaLeadsBot`;
 - в `.env` заполнены `TELEGRAM_BOT_TOKEN` и `TELEGRAM_CHAT_ID` для текущей рабочей лички Telegram-аккаунта `AK5`;
 - `2026-05-23` добавлен второй получатель Telegram-уведомлений по профилю `@M_a_x_i_m_M_i_k_h_a_i_l_o_v` через `TELEGRAM_EXTRA_CHAT_IDS`;
@@ -189,6 +223,28 @@
   - LCP улучшился примерно `4.9s -> 2.7s`;
   - `interactive` улучшился примерно `24.4s -> 5.0s`;
   - суммарный сетевой вес страницы в Lighthouse снизился примерно `7.38 MB -> 0.47 MB`;
+- `2026-05-28 live hero + product image deploy` дополнительно подтверждены:
+  - `docker inspect` для `madcore_gena_app` вернул `healthy`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - live HTML `https://madcore.site` preload-ит `/_next/image?...hero-metallic-premium-v1.avif...`;
+  - live HTML `https://madcore.site` отдает:
+    - `og:image` -> `https://madcore.site/images/hero-metallic-premium-v1.png`
+    - `twitter:image` -> `https://madcore.site/images/hero-metallic-premium-v1.png`
+    - product-card -> `/images/product-metallic-card-v2.avif`
+  - `https://madcore.site/images/hero-metallic-premium-v1.avif` отвечает `200` и `content-length: 45969`;
+  - `https://madcore.site/images/product-metallic-card-v2.avif` отвечает `200` и `content-length: 123892`;
+- `2026-05-30 live ready gena image deploy` дополнительно подтверждены:
+  - `docker inspect` для `madcore_gena_app` вернул `healthy`;
+  - `SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-smoke.sh https://madcore.site` проходит;
+  - `METRIKA_COUNTER_ID=109282367 SITE_WWW_DOMAIN=www.madcore.site ./scripts/production-adtech-smoke.sh https://madcore.site` проходит;
+  - live HTML `https://madcore.site` использует:
+    - hero-image -> `hero-metallic-premium-v1.avif`
+    - product-card -> `product-metallic-card-v2.avif`
+    - `og:image` -> `https://madcore.site/images/hero-metallic-premium-v1.png`
+    - `twitter:image` -> `https://madcore.site/images/hero-metallic-premium-v1.png`
+  - `https://madcore.site/images/hero-metallic-premium-v1.avif` отвечает `200` и `content-length: 57826`;
+  - `https://madcore.site/images/product-metallic-card-v2.avif` отвечает `200` и `content-length: 51238`;
 
 ## Что заполнять в `/opt/madcore-gena/.env`
 
